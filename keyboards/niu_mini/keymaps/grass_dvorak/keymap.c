@@ -33,33 +33,33 @@ const uint32_t PROGMEM unicode_map[] {
 };
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-	/* Layer 0
+	/* Dvorak
 	 * ,-----------------------------------------------------------------------------------.
-	 * | Esc  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Bksp |
+	 * | TAB  |   '  |   ,  |   .  |   P  |   Y  |   F  |   G  |   C  |   R  |   L  | Bksp |
 	 * |------+------+------+------+------+-------------+------+------+------+------+------|
-	 * | Tab  |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |  "   |
+	 * | ESC  |   A  |   O  |   E  |   U  |   I  |   D  |   H  |   T  |   N  |   S  |ENTER |
 	 * |------+------+------+------+------+------|------+------+------+------+------+------|
-	 * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |  Up  |Enter |
+	 * | Shift|   ;  |   Q  |   J  |   K  |   X  |   B  |   M  |   W  |   V  |   Z  |SHIFT |
 	 * |------+------+------+------+------+------+------+------+------+------+------+------|
-	 * | Ctrl |  GUI | Caps |  Alt |Layer1|    Space    |Layer2|  /   | Left | Down |Right |
+	 * | Ctrl |  GUI | ALT  | WILD |LOWER |    Space    |RAISE |ALT GR| Left | GUI  | CTRL |
 	 * `-----------------------------------------------------------------------------------'
 	 */
 	[_DVORAK] = LAYOUT_planck_mit(
 		KC_TAB,  KC_QUOTE, KC_COMMA, KC_DOT,  KC_P,  KC_Y,   KC_F,  KC_G,  KC_C,    KC_R,    KC_R,    KC_BSPC,
 		KC_ESC,  KC_A,     KC_O,     KC_E,    KC_U,  KC_I,   KC_D,  KC_H,  KC_T,    KC_N,    KC_S,    KC_ENT,
 		KC_LSFT, KC_SCLN,  KC_Q,     KC_J,    KC_K,  KC_X,   KC_B,  KC_M,  KC_W,    KC_V,    KC_Z,    KC_RSFT,
-		KC_LCTL, KC_LGUI,  KC_LALT,  WILD,    LOWER,     KC_SPC,    RAISE, KC_ALGR, KC_LEFT, KC_DOWN, KC_RGHT
+		KC_LCTL, KC_LGUI,  KC_LALT,  WILD,    LOWER,     KC_SPC,    RAISE, KC_ALGR, KC_LEFT, KC_RGUI, KC_RCTL
   ),
 
 	/* Lower
 	 * ,-----------------------------------------------------------------------------------.
-	 * |      |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |  F7  |  F8  |  F9  |  F10 |      |
+	 * |      |  1   |  2   |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  |      |
 	 * |------+------+------+------+------+-------------+------+------+------+------+------|
-	 * |      | Vol- | Vol+ | Mute |      |      |      |  F11 |  F12 |      |      |      |
+	 * |      |  {   |   }  |  [   |   ]  |   /  |   \  |   ?  |   +  |   =  |   -  |      |
 	 * |------+------+------+------+------+------|------+------+------+------+------+------|
-	 * |      |      |      |      |      |      |      |      |      |      |      |      |
+	 * |      | Cut  | Copy |Paste |      |   ~  |   `  |   |  |   å  |   ä  |   ö  |      |
 	 * |------+------+------+------+------+------+------+------+------+------+------+------|
-	 * | Reset|      |      |      |      |      |      |      |      |      |      |      |
+	 * |      |      |      |      |      |      |      |      |      |      |      |      |
 	 * `-----------------------------------------------------------------------------------'
 	 */
 	[_LOWER] = LAYOUT_planck_mit(
@@ -69,13 +69,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,     KC_TRNS,      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
 	),
 
-	/* Layer 2 (r_ Indicates RGB Controls)
+	/* Raise
 	 * ,-----------------------------------------------------------------------------------.
-	 * |      |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  |      |
+	 * |      |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |  F7  |  F8  |  F9  |  F10 |      |
 	 * |------+------+------+------+------+-------------+------+------+------+------+------|
-	 * |      |r_TOG |r_Mode|r_Hue+|r_Hue-|      |      |   -  |   =  |   [  |   ]  |  \   |
+	 * |      |  F11 |  F12 |      |      |      | PgUp |  End |  Up  | Home | Del  |  \   |
 	 * |------+------+------+------+------+------|------+------+------+------+------+------|
-	 * |      |BL_TOG|BL_STEP|     |      |      |      |      |      |      |      |      |
+	 * |      |      |      |      |      |      | PgDn | Left | Down | Right| Ins  |      |
 	 * |------+------+------+------+------+------+------+------+------+------+------+------|
 	 * |      |      |      |      |      |      |      |      |      |      |      |      |
 	 * `-----------------------------------------------------------------------------------'
@@ -86,7 +86,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_INS , KC_TRNS,
 		RESET  , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,     KC_TRNS,      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
 	),
-
+	/* Wild
+	 * ,-----------------------------------------------------------------------------------.
+	 * |      |  CAD |      |      |      |      |      |      |      |      |      |      |
+	 * |------+------+------+------+------+-------------+------+------+------+------+------|
+	 * |      |AltIns|      |      |      |      |      |      |      |      |      |      |
+	 * |------+------+------+------+------+------|------+------+------+------+------+------|
+	 * |      |CSEsc |      |      |      |      |      |      |      |      |      |      |
+	 * |------+------+------+------+------+------+------+------+------+------+------+------|
+	 * |      |      |      |      |      |      |      |      |      |      |      |      |
+	 * `-----------------------------------------------------------------------------------'
+	 */
 	[_WILDCARD] = LAYOUT_planck_mit(
 		KC_TRNS, CAD    , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
 		KC_TRNS, ALTINS , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
