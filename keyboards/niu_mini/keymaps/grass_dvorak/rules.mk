@@ -1,2 +1,2 @@
-unicodemap_enable = yes
+UNICODEMAP_ENABLE = yes
 
