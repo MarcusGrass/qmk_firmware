@@ -34,9 +34,9 @@ const uint32_t PROGMEM unicode_map[] = {
     [UMLAUT_CAPS]  = 0xD6, // Ö
 };
 
-#define KC_ARIN = XP(ARING, ARING_CAPS);
-#define KC_AUML = XP(AUMLAUT, AUMLAUT_CAPS);
-#define KC_UMLA = XP(UMLAUT, UMLAUT_CAPS);
+#define KC_ARIN XP(ARING, ARING_CAPS);
+#define KC_AUML XP(AUMLAUT, AUMLAUT_CAPS);
+#define KC_UMLA XP(UMLAUT, UMLAUT_CAPS);
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
