@@ -25,7 +25,7 @@ enum unicode_names {
     UMLAUT_CAPS = 5,
 };
 
-const uint32_t PROGMEM unicode_map[] {
+const uint32_t PROGMEM unicode_map[] = {
     [ARING]        = 0xE5, // å
     [ARING_CAPS]   = 0xC5, // Å
     [AUMLAUT]      = 0xE4, // ä
