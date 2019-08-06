@@ -15,6 +15,7 @@ enum {
 #define CAD LCTL(LALT(KC_DEL))
 #define ALTINS LALT(KC_INS)
 #define ESC_CTL MT(MOD_LCTL, KC_ESC)
+#define LSFT_F6 LSFT(KC_F6)
 
 enum unicode_names {
     ARING = 0,
@@ -105,7 +106,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	 * `-----------------------------------------------------------------------------------'
 	 */
 	[_WILDCARD] = LAYOUT_planck_mit(
-		KC_TRNS, CAD    , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+		KC_TRNS, CAD    , LSFT_F6, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
 		KC_TRNS, ALTINS , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
 		KC_TRNS, CSE    , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, UC_M_OS, UC_M_LN, UC_M_WI, UC_M_WC, KC_TRNS,
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,      KC_TRNS,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
