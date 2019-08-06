@@ -1,5 +1,5 @@
 #include QMK_KEYBOARD_H
-
+#define UNICODEMAP_ENABLE 1
 enum {
 	_DVORAK   = 0, // Standard layer
 	_LOWER    = 1, // Hold layer
