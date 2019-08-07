@@ -121,7 +121,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case SFTAPSTR:
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT))) {
-                    tap_code16(LSFT(KC_2));
+                    tap_code(KC_2);
                 } else {
                     tap_code(KC_BSLS);
                 }
@@ -129,8 +129,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             break;
         case COMLBR:
             if (record -> event.pressed) {
-                if (keyboard_report -> mods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT))) {
-                    tap_code(KC_NUBS);
+                if (keyboard_report -> mods) {
+                    // Need to unregister and re-register shift here.
+                    if (MOD_BIT(KC_LSFT)) {
+                        unregister_code(KC_LSFT);
+                        tap_code(KC_NUBS);
+                        register_code(KC_LSFT);
+                    } else if (MOD_BIT(KC_RSFT)) {
+                        unregister_code(KC_RSFT);
+                        tap_code(KC_NUBS);
+                        register_code(KC_RSFT);
+                    }
                 } else {
                     tap_code(KC_COMMA);
                 }
@@ -139,7 +148,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case DOTRBR:
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT))) {
-                    tap_code16(LSFT(KC_NUBS));
+                    tap_code(KC_NUBS); // Should be shifted but shift is already pressed.
                 } else {
                     tap_code(KC_DOT);
                 }
@@ -148,7 +157,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case SCOLCOL:
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT))) {
-                    tap_code16(LSFT(KC_DOT));
+                    tap_code(KC_DOT); // Should be shifted but shift is already pressed
                 } else {
                     tap_code16(LSFT(KC_COMMA));
                 }
