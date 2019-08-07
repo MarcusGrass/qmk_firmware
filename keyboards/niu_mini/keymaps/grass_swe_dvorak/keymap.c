@@ -121,36 +121,36 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case SFTAPSTR:
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT))) {
-                    register_code16(LSFT(KC_2));
+                    tap_code16(LSFT(KC_2));
                 } else {
-                    register_code(KC_BSLS);
+                    tap_code(KC_BSLS);
                 }
             }
             break;
         case COMLBR:
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT))) {
-                    register_code(KC_NUBS);
+                    tap_code(KC_NUBS);
                 } else {
-                    register_code(KC_COMMA);
+                    tap_code(KC_COMMA);
                 }
             }
             break;
         case DOTRBR:
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT))) {
-                    register_code16(LSFT(KC_NUBS));
+                    tap_code16(LSFT(KC_NUBS));
                 } else {
-                    register_code(KC_DOT);
+                    tap_code(KC_DOT);
                 }
             }
             break;
         case SCOLCOL:
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT))) {
-                    register_code16(KC_COMMA);
+                    tap_code16(LSFT(KC_DOT));
                 } else {
-                    register_code16(LSFT(KC_DOT));
+                    tap_code16(LSFT(KC_COMMA));
                 }
             }
             break;
