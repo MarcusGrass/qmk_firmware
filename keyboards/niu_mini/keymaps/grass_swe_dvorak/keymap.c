@@ -121,9 +121,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case SFTAPSTR:
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT))) {
-		    register_code(KC_LSFT);
-                    register_code(KC_2);
-		    unregister_code(KC_LSFT);
+                    register_code16(LSFT(KC_2));
                 } else {
                     register_code(KC_BSLS);
                 }
@@ -141,9 +139,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case DOTRBR:
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT))) {
-		    register_code(KC_LSFT);
-                    register_code(KC_NUBS);
-		    unregister_code(KC_LSFT);
+                    register_code16(LSFT(KC_NUBS));
                 } else {
                     register_code(KC_DOT);
                 }
@@ -152,13 +148,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case SCOLCOL:
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT))) {
-		    register_code(KC_LSFT);
-                    register_code(KC_COMMA);
-		    unregister_code(KC_LSFT);
+                    register_code16(KC_COMMA);
                 } else {
-		    register_code(KC_LSFT);
-                    register_code(KC_DOT);
-		    unregister_code(KC_LSFT);
+                    register_code16(LSFT(KC_DOT));
                 }
             }
             break;
