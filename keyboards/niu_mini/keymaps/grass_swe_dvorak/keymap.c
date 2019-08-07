@@ -47,7 +47,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[_DVORAK] = LAYOUT_planck_mit(
 		KC_TAB,  SFTAPSTR, COMLBR,   DOTRBR,  KC_P,  KC_Y,   KC_F,  KC_G,  KC_C,    KC_R,    KC_L,    KC_BSPC,
 		ESC_CTL, KC_A,     KC_O,     KC_E,    KC_U,  KC_I,   KC_D,  KC_H,  KC_T,    KC_N,    KC_S,    KC_ENT,
-		KC_LSFT, SCOLCOL,  KC_Q,     KC_J,    KC_K,  KC_X,   KC_B,  KC_M,  KC_W,    KC_V,    KC_Z,    KC_RSFT,
+		KC_LSFT, SCOLCOL,  KC_Q,     KC_J,    KC_K,  KC_X,   KC_B,  KC_M,  KC_W,    KC_V,    KC_Z,    KC_LSFT,
 		KC_LCTL, KC_LGUI,  KC_LALT,  WILD,    LOWER,     KC_SPC,    NUM ,  RAISE,   KC_ALGR, KC_RGUI, KC_RCTL
     ),
 
@@ -124,7 +124,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case SFTAPSTR:
             if (record -> event.pressed) {
-                if (keyboard_report -> mods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT))) {
+                if (keyboard_report -> mods & MOD_BIT(KC_LSFT)) {
                     tap_code(KC_2);
                 } else {
                     tap_code(KC_BSLS);
@@ -133,17 +133,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             break;
         case COMLBR:
             if (record -> event.pressed) {
-                if (keyboard_report -> mods) {
+                if (keyboard_report -> mods & MOD_BIT(KC_LSFT)) {
                     // Need to unregister and re-register shift here.
-                    if (MOD_BIT(KC_LSFT)) {
-                        unregister_code(KC_LSFT);
-                        tap_code(KC_NUBS);
-                        register_code(KC_LSFT);
-                    } else if (MOD_BIT(KC_RSFT)) {
-                        unregister_code(KC_RSFT);
-                        tap_code(KC_NUBS);
-                        register_code(KC_RSFT);
-                    }
+                    unregister_code(KC_LSFT);
+                    tap_code(KC_NUBS);
+                    register_code(KC_LSFT);
                 } else {
                     tap_code(KC_COMMA);
                 }
@@ -151,7 +145,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             break;
         case DOTRBR:
             if (record -> event.pressed) {
-                if (keyboard_report -> mods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT))) {
+                if (keyboard_report -> mods & MOD_BIT(KC_LSFT)) {
                     tap_code(KC_NUBS); // Should be shifted but shift is already pressed.
                 } else {
                     tap_code(KC_DOT);
@@ -160,7 +154,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             break;
         case SCOLCOL:
             if (record -> event.pressed) {
-                if (keyboard_report -> mods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT))) {
+                if (keyboard_report -> mods & MOD_BIT(KC_LSFT)) {
                     tap_code(KC_DOT); // Should be shifted but shift is already pressed
                 } else {
                     tap_code16(LSFT(KC_COMMA));
