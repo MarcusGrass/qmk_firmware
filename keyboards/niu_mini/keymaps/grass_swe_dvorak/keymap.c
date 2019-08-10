@@ -36,7 +36,7 @@ enum custom_keycodes {
     SCOLCOL, // ;:
 	SP_DV,
     SP_DVANS,
-    SP_OW
+    SP_QW
 };
 
 
@@ -194,7 +194,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	 * |      |      |      |      |      |      |      |      |      |      |      |      |
 	 * `-----------------------------------------------------------------------------------'
 	 */
-	[_NUM] = LAYOUT_planck_mit(
+	[_SETTINGS] = LAYOUT_planck_mit(
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, SP_DV  , SP_DVANS,SP_QW  , KC_TRNS,
@@ -252,7 +252,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             break;
     	case SP_DV:
-    		if (recond -> event.pressed) {
+    		if (record -> event.pressed) {
     			set_single_persistent_default_layer(_DVORAK);
     		}
     		break;
@@ -262,7 +262,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     		}
     		break;
     	case SP_QW:
-    		if (recond -> event.pressed) {
+    		if (record -> event.pressed) {
     			set_single_persistent_default_layer(_QWERTY_ANSI);
     		}
     		break;
