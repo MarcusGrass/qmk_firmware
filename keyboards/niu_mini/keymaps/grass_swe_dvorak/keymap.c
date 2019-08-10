@@ -2,17 +2,23 @@
 #include "keymap_swedish.h"
 
 enum {
-	_DVORAK     = 0, // Standard layer
-	_LOWER      = 1, // Hold layer
-	_RAISE      = 2, // Hold layer
-	_WILDCARD   = 3, // Hold layer
-	_NUM        = 4 // Hold layer
+	_DVORAK      = 0, // Dvorak for Swedish QWERTY Layout, can type åäö
+	_DVORAK_ANSI = 1, // Dvorak for US ANSI QWERTY Layout
+	_QWERTY_ANSI = 2, // QWERTY for US ANSI QWERTY Layout
+	_LOWER       = 3, // Hold layer for special characters when using Nordic layouts
+	_LOWER_ANSI  = 4, // Hold layer for special characters when using ANSI layouts
+	_RAISE       = 5, // Hold layer rarely used specials such as F-keys and arrows
+	_WILDCARD    = 6, // Hold layer for special commands and volume/led controls
+	_NUM         = 7, // Hold layer for numbers
+	_SETTINGS    = 8, // Hold layer for switching keyboard settings
 };
 
 #define LOWER MO(_LOWER)
+#define LOWANS MO(_LOWER_ANSI)
 #define RAISE MO(_RAISE)
 #define WILD MO(_WILDCARD)
 #define NUM MO(_NUM)
+#define SETTS MO(_SETTINGS)
 
 #define CSE LCTL(LSFT(KC_ESC))
 #define CAD LCTL(LALT(KC_DEL))
@@ -28,12 +34,15 @@ enum custom_keycodes {
     COMLBR, // ,<
     DOTRBR, // .>
     SCOLCOL, // ;:
+	SP_DV,
+    SP_DVANS,
+    SP_OW
 };
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-	/* Dvorak
+	/* Dvorak NO
 	 * ,-----------------------------------------------------------------------------------.
 	 * | TAB  |   '  |   ,  |   .  |   P  |   Y  |   F  |   G  |   C  |   R  |   L  | Bksp |
 	 * |------+------+------+------+------+-------------+------+------+------+------+------|
@@ -41,16 +50,51 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	 * |------+------+------+------+------+------|------+------+------+------+------+------|
 	 * | Shift|   ;  |   Q  |   J  |   K  |   X  |   B  |   M  |   W  |   V  |   Z  |SHIFT |
 	 * |------+------+------+------+------+------+------+------+------+------+------+------|
-	 * | Ctrl |  GUI | ALT  | WILD |LOWER |    Space    |  NUM | RAISE|ALT GR| GUI  | CTRL |
+	 * | Ctrl |  GUI | ALT  | WILD |LOWER |    Space    |  NUM | RAISE|ALT GR|Setts | CTRL |
 	 * `-----------------------------------------------------------------------------------'
 	 */
 	[_DVORAK] = LAYOUT_planck_mit(
 		KC_TAB,  SFTAPSTR, COMLBR,   DOTRBR,  KC_P,  KC_Y,   KC_F,  KC_G,  KC_C,    KC_R,    KC_L,    KC_BSPC,
 		ESC_CTL, KC_A,     KC_O,     KC_E,    KC_U,  KC_I,   KC_D,  KC_H,  KC_T,    KC_N,    KC_S,    KC_ENT,
 		KC_LSFT, SCOLCOL,  KC_Q,     KC_J,    KC_K,  KC_X,   KC_B,  KC_M,  KC_W,    KC_V,    KC_Z,    KC_LSFT,
-		KC_LCTL, KC_LGUI,  KC_LALT,  WILD,    LOWER,     KC_SPC,    NUM ,  RAISE,   KC_ALGR, KC_RGUI, KC_RCTL
+		KC_LCTL, KC_LGUI,  KC_LALT,  WILD,    LOWER,     KC_SPC,    NUM ,  RAISE,   KC_ALGR, SETTS,   KC_RCTL
     ),
 
+    /* Dvorak ANSI
+	 * ,-----------------------------------------------------------------------------------.
+	 * | TAB  |   '  |   ,  |   .  |   P  |   Y  |   F  |   G  |   C  |   R  |   L  | Bksp |
+	 * |------+------+------+------+------+-------------+------+------+------+------+------|
+	 * | ESC  |   A  |   O  |   E  |   U  |   I  |   D  |   H  |   T  |   N  |   S  |ENTER |
+	 * |------+------+------+------+------+------|------+------+------+------+------+------|
+	 * | Shift|   ;  |   Q  |   J  |   K  |   X  |   B  |   M  |   W  |   V  |   Z  |SHIFT |
+	 * |------+------+------+------+------+------+------+------+------+------+------+------|
+	 * | Ctrl |  GUI | ALT  | WILD |LOWER |    Space    |  NUM | RAISE|ALT GR|Setts | CTRL |
+	 * `-----------------------------------------------------------------------------------'
+	 */
+	[_DVORAK_ANSI] = LAYOUT_planck_mit(
+		KC_TAB,  KC_QUOT,  KC_COMM,  KC_DOT,  KC_P,  KC_Y,   KC_F,  KC_G,  KC_C,    KC_R,    KC_L,    KC_BSPC,
+		ESC_CTL, KC_A,     KC_O,     KC_E,    KC_U,  KC_I,   KC_D,  KC_H,  KC_T,    KC_N,    KC_S,    KC_ENT,
+		KC_LSFT, KC_SCLN,  KC_Q,     KC_J,    KC_K,  KC_X,   KC_B,  KC_M,  KC_W,    KC_V,    KC_Z,    KC_LSFT,
+		KC_LCTL, KC_LGUI,  KC_LALT,  WILD,    LOWANS,    KC_SPC,    NUM ,  RAISE,   KC_ALGR, SETTS,   KC_RCTL
+    ),
+
+    /* QWERTY ANSI
+	 * ,-----------------------------------------------------------------------------------.
+	 * | TAB  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Bksp |
+	 * |------+------+------+------+------+-------------+------+------+------+------+------|
+	 * | ESC  |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |ENTER |
+	 * |------+------+------+------+------+------|------+------+------+------+------+------|
+	 * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   '  |SHIFT |
+	 * |------+------+------+------+------+------+------+------+------+------+------+------|
+	 * | Ctrl |  GUI | ALT  | WILD |LOWER |    Space    |  NUM | RAISE|ALT GR|Setts | CTRL |
+	 * `-----------------------------------------------------------------------------------'
+	 */
+	[_DVORAK_ANSI] = LAYOUT_planck_mit(
+		KC_TAB,  KC_Q,     KC_W,     KC_E,    KC_R,  KC_T,   KC_Y,  KC_U,  KC_I,    KC_O,    KC_P,    KC_BSPC,
+		ESC_CTL, KC_A,     KC_S,     KC_D,    KC_F,  KC_G,   KC_H,  KC_J,  KC_K,    KC_L,    KC_SCLN, KC_ENT,
+		KC_LSFT, KC_Z,     KC_X,     KC_C,    KC_V,  KC_B,   KC_N,  KC_M,  KC_COMM, KC_DOT,  KC_QUOT, KC_LSFT,
+		KC_LCTL, KC_LGUI,  KC_LALT,  WILD,    LOWANS,    KC_SPC,    NUM ,  RAISE,   KC_ALGR, SETTS,   KC_RCTL
+    ),
 	/* Lower
 	 * ,-----------------------------------------------------------------------------------.
 	 * |      |  !   |  @   |   #  |   $  |   %  |   ^  |   &  |   (  |   )  |   *  |      |
@@ -64,8 +108,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	 */
 	[_LOWER] = LAYOUT_planck_mit(
 		KC_TRNS, KC_EXLM, NO_AT  , KC_HASH, NO_DLR , KC_PERC, NO_CIRC, NO_AMPR, NO_LPRN, NO_RPRN, NO_ASTR, KC_TRNS,
-		KC_TRNS, NO_PLUS, NO_EQL,  NO_LBRC, NO_RBRC, NO_QUES, NO_BSLS, NO_SLSH, NO_LCBR, NO_RCBR, NO_MINS, KC_TRNS,
+		KC_TRNS, NO_PLUS, NO_EQL , NO_LBRC, NO_RBRC, NO_QUES, NO_BSLS, NO_SLSH, NO_LCBR, NO_RCBR, NO_MINS, KC_TRNS,
 		KC_TRNS, KC_TRNS, _CUT   , _COPY  , _PASTE , NO_TILD, NO_GRV , NO_PIPE, NO_AA  , NO_AE  , NO_OSLH, KC_TRNS,
+		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,     KC_TRNS,      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
+	),
+
+	/* Lower ANSI
+	 * ,-----------------------------------------------------------------------------------.
+	 * |      |  !   |  @   |   #  |   $  |   %  |   ^  |   &  |   (  |   )  |   *  |      |
+	 * |------+------+------+------+------+-------------+------+------+------+------+------|
+	 * |      |  +   |   =  |  [   |   ]  |   ?  |   \  |   /  |   {  |   }  |   -  |      |
+	 * |------+------+------+------+------+------|------+------+------+------+------+------|
+	 * |      | Cut  | Copy |Paste |      |   ~  |   `  |   |  |      |      |      |      |
+	 * |------+------+------+------+------+------+------+------+------+------+------+------|
+	 * |      |      |      |      |      |      |      |      |      |      |      |      |
+	 * `-----------------------------------------------------------------------------------'
+	 */
+	[_LOWER_ANSI] = LAYOUT_planck_mit(
+		KC_TRNS, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC, KC_CIRC, KC_AMPR, KC_LPRN, KC_RPRN, KC_ASTR, KC_TRNS,
+		KC_TRNS, KC_PLUS, KC_EQL,  KC_LBRC, KC_RBRC, KC_QUES, KC_BSLS, KC_SLSH, KC_LCBR, KC_RCBR, KC_MINS, KC_TRNS,
+		KC_TRNS, KC_TRNS, _CUT   , _COPY  , _PASTE , KC_TILD, KC_GRV , KC_PIPE, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,     KC_TRNS,      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
 	),
 
@@ -73,16 +135,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	 * ,-----------------------------------------------------------------------------------.
 	 * |      |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |  F7  |  F8  |  F9  |  F10 |      |
 	 * |------+------+------+------+------+-------------+------+------+------+------+------|
-	 * |      |  F11 |  F12 |      |      |      | PgUp |  End |  Up  | Home | Del  |  \   |
+	 * |      | Left |Right |  Up  | Down | F11  | F12  | Pscr | PgUp | Home | Del  |      |
 	 * |------+------+------+------+------+------|------+------+------+------+------+------|
-	 * |      |      |      |      |      |      | PgDn | Left | Down | Right| Ins  |      |
+	 * |      |      |      |      |      |      |      |      | PgDn | End  | Ins  |      |
 	 * |------+------+------+------+------+------+------+------+------+------+------+------|
 	 * |      |      |      |      |      |      |      |      |      |      |      |      |
 	 * `-----------------------------------------------------------------------------------'
 	 */
 	[_RAISE] = LAYOUT_planck_mit(
 		KC_TRNS, KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  , KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , KC_TRNS,
-		KC_TRNS, KC_LEFT, KC_RGHT, KC_UP  , KC_DOWN, KC_TRNS, KC_F11 , KC_F12 , KC_PGUP, KC_HOME, KC_DEL , KC_TRNS,
+		KC_TRNS, KC_LEFT, KC_RGHT, KC_UP  , KC_DOWN, KC_F11,  KC_F12 , KC_PSCR, KC_PGUP, KC_HOME, KC_DEL , KC_TRNS,
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PGDN, KC_END , KC_INS , KC_TRNS,
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,     KC_TRNS,      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
 	),
@@ -90,7 +152,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	 * ,-----------------------------------------------------------------------------------.
 	 * |      | CAD  |      |      |      |      |      |      |      |      |      |      |
 	 * |------+------+------+------+------+-------------+------+------+------+------+------|
-	 * |      |AltIns|      |      |      |      |      |      |      |      |      |      |
+	 * |      |AltIns|      |      | MPLY |      |      |      |      |      |      |      |
 	 * |------+------+------+------+------+------|------+------+------+------+------+------|
 	 * |      |CSEsc |      |      |      |      |      |      |      |      |      |      |
 	 * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -99,15 +161,43 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	 */
 	[_WILDCARD] = LAYOUT_planck_mit(
 		KC_TRNS, CAD    , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-		KC_TRNS, ALTINS , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+		KC_TRNS, ALTINS , KC_TRNS, KC_MPLY, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
 		KC_TRNS, CSE    , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,      KC_TRNS,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
 	),
-
+	/* NUM
+	 * ,-----------------------------------------------------------------------------------.
+	 * |      |      |      |      |      |      |      |      |      |      |      |      |
+	 * |------+------+------+------+------+-------------+------+------+------+------+------|
+	 * |      |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  |      |
+	 * |------+------+------+------+------+------|------+------+------+------+------+------|
+	 * |      |      |      |      |      |      |      |      |      |      |      |      |
+	 * |------+------+------+------+------+------+------+------+------+------+------+------|
+	 * |      |      |      |      |      |      |      |      |      |      |      |      |
+	 * `-----------------------------------------------------------------------------------'
+	 */
 	[_NUM] = LAYOUT_planck_mit(
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
 		KC_TRNS, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , KC_TRNS,
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,      KC_TRNS,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
+	),
+
+	/* SETTINGS
+	 * ,-----------------------------------------------------------------------------------.
+	 * |      |      |      |      |      |      |      |      |      |      |      |      |
+	 * |------+------+------+------+------+-------------+------+------+------+------+------|
+	 * |      |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  |      |
+	 * |------+------+------+------+------+------|------+------+------+------+------+------|
+	 * |      |      |      |      |      |      |      |      |      |      |      |      |
+	 * |------+------+------+------+------+------+------+------+------+------+------+------|
+	 * |      |      |      |      |      |      |      |      |      |      |      |      |
+	 * `-----------------------------------------------------------------------------------'
+	 */
+	[_NUM] = LAYOUT_planck_mit(
+		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, SP_DV  , SP_DVANS,SP_QW  , KC_TRNS,
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,      KC_TRNS,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
 	)
 };
@@ -161,6 +251,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
             }
             break;
+    	case SP_DV:
+    		if (recond -> event.pressed) {
+    			set_single_persistent_default_layer(_DVORAK);
+    		}
+    		break;
+    	case SP_DVANS:
+    		if (record -> event.pressed) {
+    			set_single_persistent_default_layer(_DVORAK_ANSI);
+    		}
+    		break;
+    	case SP_QW:
+    		if (recond -> event.pressed) {
+    			set_single_persistent_default_layer(_QWERTY_ANSI);
+    		}
+    		break;
     }
 	return true;
 }
