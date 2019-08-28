@@ -224,10 +224,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     kcBslsRegistered = true;
                 }
             } else {
-                if (keyboard_report -> mods & MOD_BIT(KC_LSFT) && kc2Registered) {
+                if (kc2Registered) {
                     unregister_code(KC_2);
                     kc2Registered = false;
-                } else if (kcBslsRegistered) {
+                }
+                if (kcBslsRegistered) {
                     unregister_code(KC_BSLS);
                     kcBslsRegistered = false;
                 }
