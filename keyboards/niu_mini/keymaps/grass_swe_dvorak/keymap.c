@@ -209,6 +209,8 @@ void matrix_init_user(void) {
 void matrix_scan_user(void) {
 }
 
+bool kc2Registered = false;
+bool kcBslsRegistered = false;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
@@ -216,14 +218,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & MOD_BIT(KC_LSFT)) {
                     register_code(KC_2);
+                    kc2Registered = true;
                 } else {
                     register_code(KC_BSLS);
+                    kcBslsRegistered = true;
                 }
             } else {
-                if (keyboard_report -> mods & MOD_BIT(KC_LSFT)) {
+                if (keyboard_report -> mods & MOD_BIT(KC_LSFT) && kc2Registered) {
                     unregister_code(KC_2);
-                } else {
+                    kc2Registered = false;
+                } else if (kc2Registered) {
                     unregister_code(KC_BSLS);
+                    kcBslsRegistered = false;
                 }
             }
             break;
