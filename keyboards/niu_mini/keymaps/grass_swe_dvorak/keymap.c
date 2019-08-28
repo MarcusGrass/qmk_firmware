@@ -215,9 +215,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case SFTAPSTR:
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & MOD_BIT(KC_LSFT)) {
-                    tap_code(KC_2);
+                    register_code(KC_2);
                 } else {
-                    tap_code(KC_BSLS);
+                    register_code(KC_BSLS);
+                }
+            } else {
+                if (keyboard_report -> mods & MOD_BIT(KC_LSFT)) {
+                    unregister_code(KC_2);
+                } else {
+                    unregister_code(KC_BSLS);
                 }
             }
             break;
@@ -231,14 +237,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 } else {
                     tap_code(KC_COMMA);
                 }
+            } else {
+
             }
             break;
         case DOTRBR:
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & MOD_BIT(KC_LSFT)) {
-                    tap_code(KC_NUBS); // Should be shifted but shift is already pressed.
+                    register_code(KC_NUBS); // Should be shifted but shift is already pressed.
                 } else {
-                    tap_code(KC_DOT);
+                    register_code(KC_DOT);
+                }
+            } else {
+                if (keyboard_report -> mods & MOD_BIT(KC_LSFT)) {
+                    unregister_code(KC_NUBS); // Should be shifted but shift is already pressed.
+                } else {
+                    unregister_code(KC_DOT);
                 }
             }
             break;
