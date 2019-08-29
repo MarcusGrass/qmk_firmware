@@ -260,6 +260,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 if (bitSet(opts, 6)) {
                     unregister_code(KC_NUBS);
                     clearBit(&opts, 6);
+                    unregister_code(KC_LSFT);
                 }
                 if (bitSet(opts, 7)) {
                     unregister_code(KC_COMMA);
@@ -332,7 +333,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 clearBit(&opts, 5);
 
             } else {
-                // TODO: Check if unregistry has to happen in shifted state.
                 unregister_code(KC_LSFT);
 
                 // Unregister first special
