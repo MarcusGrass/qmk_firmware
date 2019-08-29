@@ -209,28 +209,39 @@ void matrix_init_user(void) {
 void matrix_scan_user(void) {
 }
 
-bool kc2Registered = false;
-bool kcBslsRegistered = false;
 
+void setBit(char* toSet, char pos) {
+    *toSet |= (char)1 << pos;
+}
+
+void clearBit(char* toClear, char pos) {
+    *toClear &= ~((char)1 << pos);
+}
+
+char bitSet(char toCheck, char pos) {
+    return toCheck & (1 << pos);
+}
+
+char opts = 0;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case SFTAPSTR:
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & MOD_BIT(KC_LSFT)) {
-                    register_code(KC_2);
-                    kc2Registered = true;
+                    register_code(KC_2); // Should be shifted but shift is already pressed.
+                    setBit(&opts, 0);
                 } else {
                     register_code(KC_BSLS);
-                    kcBslsRegistered = true;
+                    setBit(&opts, 1);
                 }
             } else {
-                if (kc2Registered) {
+                if (bitSet(&opts, 0)) {
                     unregister_code(KC_2);
-                    kc2Registered = false;
+                    clearBit(&opts, 0);
                 }
-                if (kcBslsRegistered) {
+                if (bitSet(&opts, 1)) {
                     unregister_code(KC_BSLS);
-                    kcBslsRegistered = false;
+                    clearBit(&opts, 1);
                 }
             }
             break;
@@ -239,36 +250,63 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 if (keyboard_report -> mods & MOD_BIT(KC_LSFT)) {
                     // Need to unregister and re-register shift here.
                     unregister_code(KC_LSFT);
-                    tap_code(KC_NUBS);
-                    register_code(KC_LSFT);
+                    register_code(KC_NUBS);
+                    setBit(&opts, 6);
                 } else {
-                    tap_code(KC_COMMA);
+                    register_code(KC_COMMA);
+                    setBit(&opts, 7);
                 }
             } else {
-
+                if (bitSet(&opts, 6)) {
+                    unregister_code(KC_NUBS);
+                    clearBit(&opts, 6);
+                    register_code(KC_LSFT);
+                }
+                if (bitSet(&opts, 7)) {
+                    unregister_code(KC_COMMA);
+                    clearBit(&opts, 7);
+                }
             }
             break;
         case DOTRBR:
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & MOD_BIT(KC_LSFT)) {
                     register_code(KC_NUBS); // Should be shifted but shift is already pressed.
+                    setBit(&opts, 2);
                 } else {
                     register_code(KC_DOT);
+                    setBit(&opts, 3);
                 }
             } else {
-                if (keyboard_report -> mods & MOD_BIT(KC_LSFT)) {
-                    unregister_code(KC_NUBS); // Should be shifted but shift is already pressed.
-                } else {
-                    unregister_code(KC_DOT);
+                if (bitSet(&opts, 2)) {
+                    unregister_code(KC_NUBS);
+                    clearBit(&opts, 2);
+                }
+
+                if (bitSet(&opts, 3)) {
+                    unregister_code(KC_NUBS);
+                    clearBit(&opts, 3);
                 }
             }
             break;
         case SCOLCOL:
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & MOD_BIT(KC_LSFT)) {
-                    tap_code(KC_DOT); // Should be shifted but shift is already pressed
+                    register_code(KC_DOT); // Should be shifted but shift is already pressed
+                    setBit(&opts, 4);
                 } else {
-                    tap_code16(LSFT(KC_COMMA));
+                    register_code16(LSFT(KC_COMMA));
+                    setBit(&opts, 5);
+                }
+            } else {
+                if (bitSet(&opts, 4)) {
+                    unregister_code(KC_DOT);
+                    clearBit(&opts, 4);
+                }
+
+                if (bitSet(&opts, 5)) {
+                    unregister_code16(LSFT(KC_COMMA));
+                    clearBit(&opts, 5);
                 }
             }
             break;
@@ -287,6 +325,25 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     			set_single_persistent_default_layer(_QWERTY_ANSI);
     		}
     		break;
+        case KC_LSFT:
+            if (record -> event.pressed) {
+                register_code(KC_LSFT);
+            } else {
+                // TODO: Check if unregistry has to happen in shifted state.
+                unregister_code(KC_LSFT);
+
+                // Unregister first special
+                unregister_code(KC_2);
+                clearBit(&opts, 0);
+
+                // Unregister second special
+                unregister_code(KC_NUBS);
+                clearBit(&opts, 2);
+
+                // Unregister third special
+                unregister_code(KC_DOT);
+                clearBit(&opts, 4);
+            }
     }
 	return true;
 }
