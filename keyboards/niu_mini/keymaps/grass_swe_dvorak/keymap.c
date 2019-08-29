@@ -226,7 +226,7 @@ char opts = 0;
 bool shiftRegistered = false;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (bitSet(opts, 6) && keycode != COMLBR) {
+    if (bitSet(opts, 6)) {
         if (keycode == KC_LSFT && !(record -> event.pressed)) {
 
         } else {
