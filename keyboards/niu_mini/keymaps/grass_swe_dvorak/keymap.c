@@ -282,7 +282,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     unregister_code(KC_NUBS);
                     clearBit(&opts, 2);
                 }
-
                 if (bitSet(opts, 3)) {
                     unregister_code(KC_DOT);
                     clearBit(&opts, 3);
@@ -330,6 +329,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_LSFT:
             if (record -> event.pressed) {
                 register_code(KC_LSFT);
+
             } else {
                 // TODO: Check if unregistry has to happen in shifted state.
                 unregister_code(KC_LSFT);
@@ -345,6 +345,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 // Unregister third special
                 unregister_code(KC_DOT);
                 clearBit(&opts, 4);
+                unregister_code(KC_COMMA);
+                clearBit(&opts, 5);
             }
     }
 	return true;
