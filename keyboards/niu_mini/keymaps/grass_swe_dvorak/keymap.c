@@ -222,6 +222,7 @@ char bitSet(char toCheck, char pos) {
     return toCheck & (1 << pos);
 }
 
+bool shiftRegistered = false;
 char opts = 0;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
@@ -260,7 +261,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 if (bitSet(opts, 6)) {
                     unregister_code(KC_NUBS);
                     clearBit(&opts, 6);
-                    register_code(KC_LSFT);
+                    if (shiftRegistered) {
+                        register_code(KC_LSFT);
+                    } else {
+                        unregister_code(KC_LSFT);
+                    }
                 }
                 if (bitSet(opts, 7)) {
                     unregister_code(KC_COMMA);
@@ -329,10 +334,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_LSFT:
             if (record -> event.pressed) {
                 register_code(KC_LSFT);
+                shiftRegistered = true;
+                unregister_code(KC_COMMA);
+                clearBit(&opts, 5);
 
             } else {
                 // TODO: Check if unregistry has to happen in shifted state.
                 unregister_code(KC_LSFT);
+                shiftRegistered = false;
 
                 // Unregister first special
                 unregister_code(KC_2);
@@ -348,6 +357,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_code(KC_COMMA);
                 clearBit(&opts, 5);
             }
+            break;
     }
 	return true;
 }
