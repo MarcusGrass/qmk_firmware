@@ -284,7 +284,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
 
                 if (bitSet(opts, 3)) {
-                    unregister_code(KC_NUBS);
+                    unregister_code(KC_DOT);
                     clearBit(&opts, 3);
                 }
             }
@@ -295,7 +295,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     register_code(KC_DOT); // Should be shifted but shift is already pressed
                     setBit(&opts, 4);
                 } else {
-                    register_code16(LSFT(KC_COMMA));
+                    register_code(KC_LSFT);
+                    register_code(KC_COMMA);
                     setBit(&opts, 5);
                 }
             } else {
@@ -305,7 +306,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
 
                 if (bitSet(opts, 5)) {
-                    unregister_code16(LSFT(KC_COMMA));
+                    unregister_code(KC_COMMA);
+                    unregister_code(KC_LSFT);
                     clearBit(&opts, 5);
                 }
             }
