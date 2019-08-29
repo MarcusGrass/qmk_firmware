@@ -235,11 +235,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     setBit(&opts, 1);
                 }
             } else {
-                if (bitSet(&opts, 0)) {
+                if (bitSet(opts, 0)) {
                     unregister_code(KC_2);
                     clearBit(&opts, 0);
                 }
-                if (bitSet(&opts, 1)) {
+                if (bitSet(opts, 1)) {
                     unregister_code(KC_BSLS);
                     clearBit(&opts, 1);
                 }
@@ -257,12 +257,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     setBit(&opts, 7);
                 }
             } else {
-                if (bitSet(&opts, 6)) {
+                if (bitSet(opts, 6)) {
                     unregister_code(KC_NUBS);
                     clearBit(&opts, 6);
                     register_code(KC_LSFT);
                 }
-                if (bitSet(&opts, 7)) {
+                if (bitSet(opts, 7)) {
                     unregister_code(KC_COMMA);
                     clearBit(&opts, 7);
                 }
@@ -278,12 +278,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     setBit(&opts, 3);
                 }
             } else {
-                if (bitSet(&opts, 2)) {
+                if (bitSet(opts, 2)) {
                     unregister_code(KC_NUBS);
                     clearBit(&opts, 2);
                 }
 
-                if (bitSet(&opts, 3)) {
+                if (bitSet(opts, 3)) {
                     unregister_code(KC_NUBS);
                     clearBit(&opts, 3);
                 }
@@ -299,12 +299,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     setBit(&opts, 5);
                 }
             } else {
-                if (bitSet(&opts, 4)) {
+                if (bitSet(opts, 4)) {
                     unregister_code(KC_DOT);
                     clearBit(&opts, 4);
                 }
 
-                if (bitSet(&opts, 5)) {
+                if (bitSet(opts, 5)) {
                     unregister_code16(LSFT(KC_COMMA));
                     clearBit(&opts, 5);
                 }
