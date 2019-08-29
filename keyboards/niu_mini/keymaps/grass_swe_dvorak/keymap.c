@@ -226,7 +226,7 @@ char opts = 0;
 bool shiftRegistered = false;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (bitSet(opts, 6) && keycode != DOTRBR) {
+    if (bitSet(opts, 6) && keycode != COMLBR) {
         if (shiftRegistered) {
             register_code(KC_LSFT);
         } else {
