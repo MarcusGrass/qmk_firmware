@@ -1,6 +1,9 @@
 #include QMK_KEYBOARD_H
 #include "keymap_nordic.h"
 
+#define NO_AA KC_LBRC          // å
+#define NO_ASTR LSFT(KC_BSLS)  // *
+
 enum {
     _DVORAK      = 0, // Dvorak for Swedish QWERTY Layout, can type åäö
     _DVORAK_ANSI = 1, // Dvorak for US ANSI QWERTY Layout
