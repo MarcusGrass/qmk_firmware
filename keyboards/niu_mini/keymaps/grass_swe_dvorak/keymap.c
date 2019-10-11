@@ -1,5 +1,5 @@
 #include QMK_KEYBOARD_H
-#include "keymap_swedish.h"
+#include "keymap_nordic.h"
 
 enum {
 	_DVORAK      = 0, // Dvorak for Swedish QWERTY Layout, can type åäö
