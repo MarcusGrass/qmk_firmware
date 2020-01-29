@@ -70,7 +70,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         ),
 
         [_LOWER] = LAYOUT( \
-                KC_TRNS , KC_EXLM , KC_AT   , KC_HASH, KC_DLR  , KC_PERC ,                             NO_CIRC , NO_AMPR ,  NO_LPRN, NO_RPRN , NO_ASTR , KC_TRNS,\
+                KC_TRNS , KC_EXLM , KC_AT   , KC_HASH, NO_DLR  , KC_PERC ,                             NO_CIRC , NO_AMPR ,  NO_LPRN, NO_RPRN , NO_ASTR , KC_TRNS,\
                 KC_TRNS , NO_PLUS , NO_EQL  , NO_LBRC, NO_RBRC , NO_QUES ,                             NO_BSLS , NO_SLSH ,  NO_LCBR, NO_RCBR , NO_MINS , KC_TRNS, \
                 KC_TRNS , KC_TRNS , _CUT    , _COPY  , _PASTE  , NO_TILD ,                             NO_GRV  , NO_PIPE ,  NO_AA  , NO_OSLH , NO_AE   , KC_TRNS, \
                 KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS ,         KC_TRNS , KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS,\
