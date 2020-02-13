@@ -40,6 +40,7 @@ enum custom_keycodes {
     COMLBR, // ,<
     DOTRBR, // .>
     SCOLCOL, // ;:
+    TOG_LCK,
     SP_DV,
     SP_DVANS,
     SP_QW,
@@ -76,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                 ESC_CTL , KC_T    , KC_Q    , KC_W   , KC_E    , KC_R    ,                             KC_H    , KC_J    ,  KC_K   , KC_L    , KC_SCLN , KC_ENT , \
                 KC_LSFT , KC_B    , KC_A    , KC_S   , KC_D    , KC_F    ,                             KC_N    , KC_M    ,  KC_COMM, KC_DOT  , KC_QUOT , KC_LSFT, \
                 KC_LCTL , KC_Z    , KC_X    , KC_C   , KC_V    , KC_B    , KC_M   ,          KC_ALGR , KC_SPC  , NUM     ,  RAISE  , KC_ALGR , SETTS   , KC_RCTL, \
-                                                       KC_LGUI , KC_LALT , KC_SPC ,          KC_LSFT , KC_BSPC , LOWER \
+                                                       KC_LGUI , KC_LALT , KC_SPC ,          TOG_LCK , KC_BSPC , LOWER \
         ),
 
         [_LOWER] = LAYOUT( \
@@ -160,6 +161,7 @@ char bitSet(char toCheck, char pos) {
 }
 
 char opts = 0;
+char tog = 0;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (bitSet(opts, 6)) {
@@ -257,6 +259,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
             }
             break;
+        case TOG_LCK:
+            if (record -> event.pressed) {
+                if (bitSet(tog, 0)) {
+                    unregister_code(KC_BTN1);
+                } else {
+                    register_code(KC_BTN1);
+                }
+            }
         case SP_DV:
             if (record -> event.pressed) {
                 set_single_persistent_default_layer(_DVORAK);
