@@ -263,8 +263,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record -> event.pressed) {
                 if (bitSet(tog, 0)) {
                     unregister_code(KC_BTN1);
+                    clearBit(&tog, 0);
                 } else {
                     register_code(KC_BTN1);
+                    setBit(&tog, 0);
                 }
             }
         case SP_DV:
