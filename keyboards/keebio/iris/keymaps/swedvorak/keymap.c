@@ -7,15 +7,16 @@
 #define AN_UDSC LSFT(KC_MINS)  // _
 
 enum {
-    _DVORAK      = 0, // Dvorak for Swedish QWERTY Layout, can type åäö
-    _DVORAK_ANSI = 1, // Dvorak for US ANSI QWERTY Layout
-    _QWERTY_ANSI = 2, // QWERTY for US ANSI QWERTY Layout
-    _LOWER       = 3, // Hold layer for special characters when using Nordic layouts
-    _LOWER_ANSI  = 4, // Hold layer for special characters when using ANSI layouts
-    _RAISE       = 5, // Hold layer rarely used specials such as F-keys and arrows
-    _WILDCARD    = 6, // Hold layer for special commands and volume/led controls
-    _NUM         = 7, // Hold layer for numbers
-    _SETTINGS    = 8, // Hold layer for switching keyboard settings
+    _DVORAK        = 0, // Dvorak for Swedish QWERTY Layout, can type åäö
+    _DVORAK_ANSI   = 1, // Dvorak for US ANSI QWERTY Layout
+    _QWERTY_ANSI   = 2, // QWERTY for US ANSI QWERTY Layout
+    _QWERTY_GAMING = 3,
+    _LOWER         = 4, // Hold layer for special characters when using Nordic layouts
+    _LOWER_ANSI    = 5, // Hold layer for special characters when using ANSI layouts
+    _RAISE       = 6, // Hold layer rarely used specials such as F-keys and arrows
+    _WILDCARD    = 7, // Hold layer for special commands and volume/led controls
+    _NUM         = 8, // Hold layer for numbers
+    _SETTINGS    = 9, // Hold layer for switching keyboard settings
 };
 
 #define LOWER MO(_LOWER)
@@ -41,8 +42,10 @@ enum custom_keycodes {
     SCOLCOL, // ;:
     SP_DV,
     SP_DVANS,
-    SP_QW
+    SP_QW,
+    SP_GAME
 };
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         [_DVORAK] = LAYOUT( \
                 KC_TAB  , SFTAPSTR, COMLBR  , DOTRBR , KC_P    , KC_Y    ,                             KC_F    , KC_G    ,  KC_C   , KC_R    , KC_L    , KC_BSPC, \
@@ -56,17 +59,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                 KC_TAB  , KC_QUOT , KC_COMM , KC_DOT , KC_P    , KC_Y    ,                             KC_F    , KC_G    ,  KC_C   , KC_R    , KC_L    , KC_BSPC, \
                 ESC_CTL , KC_A    , KC_O    , KC_E   , KC_U    , KC_I    ,                             KC_D    , KC_H    ,  KC_T   , KC_N    , KC_S    , KC_ENT , \
                 KC_LSFT , KC_SCLN , KC_Q    , KC_J   , KC_K    , KC_X    ,                             KC_B    , KC_M    ,  KC_W   , KC_V    , KC_Z    , KC_LSFT, \
-                KC_LCTL , KC_LGUI , KC_LALT , WILD   , LOWER   , KC_SPC  , KC_LALT ,         KC_ALGR , KC_SPC  , NUM     ,  RAISE  , KC_ALGR , SETTS   , KC_RCTL, \
+                KC_LCTL , KC_LGUI , KC_LALT , WILD   , LOWANS  , KC_SPC  , KC_LALT ,         KC_ALGR , KC_SPC  , NUM     ,  RAISE  , KC_ALGR , SETTS   , KC_RCTL, \
                                                        KC_TRNS , AN_UDSC , KC_LSFT ,         KC_LSFT , KC_BSPC , KC_TRNS \
         ),
-
 
         [_QWERTY_ANSI] = LAYOUT( \
                 KC_TAB  , KC_Q    , KC_W    , KC_E   , KC_R    , KC_T    ,                             KC_Y    , KC_U    ,  KC_I   , KC_O    , KC_P    , KC_BSPC, \
                 ESC_CTL , KC_A    , KC_S    , KC_D   , KC_F    , KC_G    ,                             KC_H    , KC_J    ,  KC_K   , KC_L    , KC_SCLN , KC_ENT , \
                 KC_LSFT , KC_Z    , KC_X    , KC_C   , KC_V    , KC_B    ,                             KC_N    , KC_M    ,  KC_COMM, KC_DOT  , KC_QUOT , KC_LSFT, \
-                KC_LCTL , KC_LGUI , KC_LALT , WILD   , LOWER   , KC_SPC  , KC_LALT ,         KC_ALGR , KC_SPC  , NUM     ,  RAISE  , KC_ALGR , SETTS   , KC_RCTL, \
+                KC_LCTL , KC_LGUI , KC_LALT , WILD   , LOWANS  , KC_SPC  , KC_LALT ,         KC_ALGR , KC_SPC  , NUM     ,  RAISE  , KC_ALGR , SETTS   , KC_RCTL, \
                                                        KC_TRNS , AN_UDSC , KC_LSFT ,         KC_LSFT , KC_BSPC , KC_TRNS \
+        ),
+
+        [_QWERTY_GAMING] = LAYOUT( \
+                KC_TAB  , KC_1    , KC_2    , KC_3   , KC_4    , KC_5    ,                             KC_6    , KC_7    ,  KC_8   , KC_9    , KC_0    , KC_BSPC, \
+                ESC_CTL , KC_T    , KC_Q    , KC_W   , KC_E    , KC_R    ,                             KC_H    , KC_J    ,  KC_K   , KC_L    , KC_SCLN , KC_ENT , \
+                KC_LSFT , KC_B    , KC_A    , KC_S   , KC_D    , KC_F    ,                             KC_N    , KC_M    ,  KC_COMM, KC_DOT  , KC_QUOT , KC_LSFT, \
+                KC_LCTL , KC_Z    , KC_X    , KC_C   , KC_V    , KC_B    , KC_M   ,          KC_ALGR , KC_SPC  , NUM     ,  RAISE  , KC_ALGR , SETTS   , KC_RCTL, \
+                                                       KC_LGUI , KC_LALT , KC_SPC ,          KC_LSFT , KC_BSPC , KC_LOWER \
         ),
 
         [_LOWER] = LAYOUT( \
@@ -120,7 +130,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         [_SETTINGS] = LAYOUT( \
                 KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS, KC_TRNS , KC_TRNS ,                             KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS,\
                 KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS, KC_TRNS , KC_TRNS ,                             KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS, \
-                KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS, KC_TRNS , KC_TRNS ,                             KC_TRNS , KC_TRNS ,  SP_DV  , SP_DVANS, SP_QW   , KC_TRNS, \
+                KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS, KC_TRNS , KC_TRNS ,                             KC_TRNS , SP_GAME ,  SP_DV  , SP_DVANS, SP_QW   , KC_TRNS, \
                 KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS ,         KC_TRNS , KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS,\
                                                        KC_TRNS , KC_TRNS , KC_TRNS ,         KC_TRNS , KC_TRNS , KC_TRNS \
         )
@@ -260,6 +270,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case SP_QW:
             if (record -> event.pressed) {
                 set_single_persistent_default_layer(_QWERTY_ANSI);
+            }
+            break;
+        case SP_GAME:
+            if (record -> event.pressed) {
+                set_single_persistent_default_layer(_QWERTY_GAMING);
             }
             break;
         case KC_LSFT:
