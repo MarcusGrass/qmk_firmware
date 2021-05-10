@@ -35,6 +35,12 @@ enum {
 #define _COPY LCTL(KC_X)
 #define _PASTE LCTL(KC_V)
 
+// Intellij
+#define IJ_BLD LCTL(KC_F9) // Build
+#define IJ_RUN LSFT(KC_F10) // Run
+#define IJ_RRUN LCTL(KC_F5) // Rerun
+#define IJ_TEST LCTL(LSFT(KC_F10)) // Run test
+
 enum custom_keycodes {
     SFTAPSTR = SAFE_RANGE, // '"
     COMLBR, // ,<
@@ -114,8 +120,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
         [_WILDCARD] = LAYOUT( \
                 KC_TRNS , CAD     , KC_TRNS , KC_TRNS, KC_TRNS , KC_TRNS ,                             KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS,\
-                KC_TRNS , ALTINS  , KC_TRNS , KC_TRNS, KC_TRNS , KC_TRNS ,                             KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS, \
-                KC_TRNS , CSE     , KC_TRNS , KC_TRNS, KC_TRNS , KC_TRNS ,                             KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS, \
+                KC_TRNS , ALTINS  , IJ_BLD  , IJ_TEST, IJ_RUN  , KC_TRNS ,                             KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS, \
+                KC_TRNS , CSE     , KC_TRNS , KC_TRNS, IJ_RRUN , KC_TRNS ,                             KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS, \
                 KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS ,         KC_TRNS , KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS,\
                                                        KC_TRNS , KC_TRNS , KC_TRNS ,         KC_TRNS , KC_TRNS , KC_TRNS \
         ),
