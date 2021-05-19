@@ -14,7 +14,7 @@ enum {
     _LOWER         = 4, // Hold layer for special characters when using Nordic layouts
     _LOWER_ANSI    = 5, // Hold layer for special characters when using ANSI layouts
     _RAISE       = 6, // Hold layer rarely used specials such as F-keys and arrows
-    _WILDCARD    = 7, // Hold layer for special commands and volume/led controls
+    _INTELLIJ    = 7, // Hold layer for special commands for intellij
     _NUM         = 8, // Hold layer for numbers
     _SETTINGS    = 9, // Hold layer for switching keyboard settings
 };
@@ -40,6 +40,18 @@ enum {
 #define IJ_RUN LSFT(KC_F10) // Run
 #define IJ_RRUN LCTL(KC_F5) // Rerun
 #define IJ_TEST LCTL(LSFT(KC_F10)) // Run test
+#define IJ_SETT LCTL(LALT(KC_S)) // Project Settings
+#define IJ_PSTR LCTL(LALT(LSFT(KC_S))) // Project structure
+#define IJ_FND1 LCTL(LALT(KC_F7)) // Find usages popup
+#define IJ_FND2 LALT(KC_F7) // Find usages
+#define IJ_COMM LCTL(KC_SLSH) // Comment selection
+#define IJ_BCOM LCTL(LSFT(KC_SLSH)) // Block comment
+#define IJ_COMP LCTL(LSFT(KC_ENT)) // Smart autocomplete
+#define IJ_REFA LCTL(LSFT(LALT(KC_T))) // Refactoring opts
+#define IJ_STCM LCTL(LSFT(KC_SPC)) // Smart type completion
+#define IJ_FOWD LCTL(LALT(KC_RGHT)) // Go forwards
+#define IJ_BACK LCTL(LALT(KC_LEFT)) // Go back
+#define IJ_POPE LALT(KC_F1) // Project open (left side focus file)
 
 enum custom_keycodes {
     SFTAPSTR = SAFE_RANGE, // '"
@@ -110,20 +122,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                        KC_TRNS , KC_TRNS , KC_TRNS ,         KC_TRNS , KC_TRNS , KC_TRNS \
         ),
 
-        [_WILDCARD] = LAYOUT( \
-                KC_TRNS , CAD     , KC_TRNS , KC_TRNS, KC_TRNS , KC_TRNS ,                             KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS,\
-                KC_TRNS , ALTINS  , KC_TRNS , KC_TRNS, KC_TRNS , KC_TRNS ,                             KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS, \
-                KC_TRNS , CSE     , KC_TRNS , KC_TRNS, KC_TRNS , KC_TRNS ,                             KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS, \
-                KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS ,         KC_TRNS , KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS,\
-                                                       KC_TRNS , KC_TRNS , KC_TRNS ,         KC_TRNS , KC_TRNS , KC_TRNS \
-        ),
-
-        [_WILDCARD] = LAYOUT( \
-                KC_TRNS , CAD     , KC_TRNS , KC_TRNS, KC_TRNS , KC_TRNS ,                             KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS,\
-                KC_TRNS , ALTINS  , IJ_BLD  , IJ_TEST, IJ_RUN  , KC_TRNS ,                             KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS, \
-                KC_TRNS , CSE     , KC_TRNS , KC_TRNS, IJ_RRUN , KC_TRNS ,                             KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS, \
-                KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS ,         KC_TRNS , KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS,\
-                                                       KC_TRNS , KC_TRNS , KC_TRNS ,         KC_TRNS , KC_TRNS , KC_TRNS \
+        [_INTELLIJ] = LAYOUT( \
+                KC_TRNS , CAD      , IJ_COMM , IJ_BCOM, IJ_RUN  , KC_TRNS ,                             KC_TRNS , KC_TRNS ,  IJ_BACK, IJ_FOWD , KC_TRNS , KC_TRNS,\
+                CSE     , ALTINS   , IJ_BLD  , IJ_TEST, IJ_COMP , KC_TRNS ,                             KC_TRNS , IJ_STCM ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS, \
+                IJ_POPE , IJ_FIND1 , IJ_PSTR , IJ_SETT, IJ_RRUN , KC_TRNS ,                             KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS, \
+                KC_TRNS , IJ_FIND2 , KC_TRNS , KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS ,         KC_TRNS , KC_TRNS , KC_TRNS ,  KC_TRNS, KC_TRNS , KC_TRNS , KC_TRNS,\
+                                                        KC_TRNS , KC_TRNS , KC_TRNS ,         KC_TRNS , KC_TRNS , KC_TRNS \
         ),
 
         [_NUM] = LAYOUT( \
