@@ -44,8 +44,8 @@ enum {
 #define IJ_PSTR LCTL(LALT(LSFT(KC_S))) // Project structure
 #define IJ_FND1 LCTL(LALT(KC_F7)) // Find usages popup
 #define IJ_FND2 LALT(KC_F7) // Find usages
-#define IJ_COMM LCTL(KC_SLSH) // Comment selection
-#define IJ_BCOM LCTL(LSFT(KC_SLSH)) // Block comment
+#define IJ_COMM LCTL(LALT(NO_SLSH)) // Comment selection
+#define IJ_BCOM LCTL(LSFT(NO_SLSH)) // Block comment
 #define IJ_COMP LCTL(LSFT(KC_ENT)) // Smart autocomplete
 #define IJ_REFA LCTL(LSFT(LALT(KC_T))) // Refactoring opts
 #define IJ_STCM LCTL(LSFT(KC_SPC)) // Smart type completion
