@@ -53,11 +53,10 @@ enum {
 #define IJ_POPE LALT(KC_F1) // Project open (left side focus file)
 
 enum custom_keycodes {
-    SFTAPSTR = SAFE_RANGE, // '"
-    COMLBR, // ,<
-    DOTRBR, // .>
-    SCOLCOL, // ;:
-    TOG_LCK,
+    SHIFT_APOSTROPHE = SAFE_RANGE, // '"
+    COMMA_LEFT_BRACKET, // ,<
+    DOT_RIGHT_BRACKET, // .>
+    SEMI_COLON_REGULAR_COLON, // ;:
     SP_DV,
     SP_DVANS,
     SP_QW,
@@ -66,9 +65,9 @@ enum custom_keycodes {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_DVORAK] = LAYOUT( \
-        KC_TAB  , SFTAPSTR, COMLBR  , DOTRBR , KC_P    , KC_Y    ,                             KC_F    , KC_G    ,  KC_C   , KC_R    , KC_L    , KC_BSPC, \
+        KC_TAB  , SHIFT_APOSTROPHE, COMMA_LEFT_BRACKET  , DOT_RIGHT_BRACKET , KC_P    , KC_Y    ,                             KC_F    , KC_G    ,  KC_C   , KC_R    , KC_L    , KC_BSPC, \
         ESC_CTL , KC_A    , KC_O    , KC_E   , KC_U    , KC_I    ,                             KC_D    , KC_H    ,  KC_T   , KC_N    , KC_S    , KC_ENT , \
-        KC_LSFT , SCOLCOL , KC_Q    , KC_J   , KC_K    , KC_X    ,                             KC_B    , KC_M    ,  KC_W   , KC_V    , KC_Z    , KC_LSFT, \
+        KC_LSFT , SEMI_COLON_REGULAR_COLON , KC_Q    , KC_J   , KC_K    , KC_X    ,                             KC_B    , KC_M    ,  KC_W   , KC_V    , KC_Z    , KC_LSFT, \
         KC_LCTL , KC_LGUI , KC_LALT , KC_TRNS   , LOWER   , KC_SPC  , KC_LALT ,         KC_ALGR , KC_SPC  , NUM     ,  RAISE  , KC_ALGR , SETTS   , KC_RCTL, \
         KC_TRNS , NO_UDSC , KC_LSFT ,         KC_LSFT , KC_BSPC , KC_TRNS \
         ),
@@ -169,115 +168,114 @@ char bitSet(char toCheck, char pos) {
     return toCheck & (1 << pos);
 }
 
-char opts = 0;
-char tog = 0;
+char pressing_double_quote = 0;
+char pressing_single_quote = 0;
+char pressing_left_bracket = 0;
+char pressing_comma = 0;
+char pressing_dot = 0;
+char pressing_right_bracket = 0;
+char pressing_semi_colon = 0;
+char pressing_reg_colon = 0;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (bitSet(opts, 6)) {
+    // Synthetically modifying the shift key, has to be handled first
+    if (pressing_left_bracket) {
         if (keycode == KC_LSFT && !(record -> event.pressed)) {
 
         } else {
             register_code(KC_LSFT);
         }
         unregister_code(KC_NUBS);
-        clearBit(&opts, 6);
+        pressing_left_bracket = 0;
     }
     switch (keycode) {
-        case SFTAPSTR:
+        case SHIFT_APOSTROPHE:
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & MOD_BIT(KC_LSFT)) {
+                    // Remapping quote to work on swedish layouts Shift held down, Shift + 2 -> Quote
                     register_code(KC_2); // Should be shifted but shift is already pressed.
-                    setBit(&opts, 0);
+                    pressing_double_quote = 1;
                 } else {
+                    // Remapping to single quote '
                     register_code(KC_BSLS);
-                    setBit(&opts, 1);
+                    pressing_single_quote = 1;
                 }
             } else {
-                if (bitSet(opts, 0)) {
+                if (pressing_double_quote) {
                     unregister_code(KC_2);
-                    clearBit(&opts, 0);
+                    pressing_double_quote = 0;
                 }
-                if (bitSet(opts, 1)) {
+                if (pressing_single_quote) {
                     unregister_code(KC_BSLS);
-                    clearBit(&opts, 1);
+                    pressing_single_quote = 0;
                 }
             }
             break;
-        case COMLBR:
+        case COMMA_LEFT_BRACKET:
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & MOD_BIT(KC_LSFT)) {
                     // Need to unregister and re-register shift here.
                     unregister_code(KC_LSFT);
                     register_code(KC_NUBS);
-                    setBit(&opts, 6);
+                    pressing_left_bracket = 1;
                 } else {
                     register_code(KC_COMMA);
-                    setBit(&opts, 7);
+                    pressing_comma = 1;
                 }
             } else {
-                if (bitSet(opts, 6)) {
+                if (pressing_left_bracket) {
                     unregister_code(KC_NUBS);
-                    clearBit(&opts, 6);
+                    pressing_left_bracket = 0;
                 }
-                if (bitSet(opts, 7)) {
+                if (pressing_comma) {
                     unregister_code(KC_COMMA);
-                    clearBit(&opts, 7);
+                    pressing_comma = 0;
                 }
             }
             break;
-        case DOTRBR:
+        case DOT_RIGHT_BRACKET:
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & MOD_BIT(KC_LSFT)) {
                     register_code(KC_NUBS); // Should be shifted but shift is already pressed.
-                    setBit(&opts, 2);
+                    pressing_right_bracket = 1;
                 } else {
                     register_code(KC_DOT);
-                    setBit(&opts, 3);
+                    pressing_dot = 1;
                 }
             } else {
-                if (bitSet(opts, 2)) {
+                if (pressing_right_bracket) {
                     unregister_code(KC_NUBS);
-                    clearBit(&opts, 2);
+                    pressing_right_bracket = 0;
                 }
-                if (bitSet(opts, 3)) {
+                if (pressing_dot) {
                     unregister_code(KC_DOT);
-                    clearBit(&opts, 3);
+                    pressing_dot = 0;
                 }
             }
             break;
-        case SCOLCOL:
+        case SEMI_COLON_REGULAR_COLON:
             if (record -> event.pressed) {
                 if (keyboard_report -> mods & MOD_BIT(KC_LSFT)) {
                     register_code(KC_DOT); // Should be shifted but shift is already pressed
-                    setBit(&opts, 4);
+                    pressing_reg_colon = 1;
                 } else {
                     register_code(KC_LSFT);
                     register_code(KC_COMMA);
-                    setBit(&opts, 5);
+                    pressing_semi_colon = 1;
                 }
             } else {
-                if (bitSet(opts, 4)) {
+                if (pressing_reg_colon) {
                     unregister_code(KC_DOT);
-                    clearBit(&opts, 4);
+                    pressing_reg_colon = 0;
                 }
 
-                if (bitSet(opts, 5)) {
+                if (pressing_semi_colon) {
                     unregister_code(KC_COMMA);
                     unregister_code(KC_LSFT);
-                    clearBit(&opts, 5);
+                    pressing_semi_colon = 0;
                 }
             }
             break;
-        case TOG_LCK:
-            if (record -> event.pressed) {
-                if (bitSet(tog, 0)) {
-                    unregister_code(KC_BTN1);
-                    clearBit(&tog, 0);
-                } else {
-                    register_code(KC_BTN1);
-                    setBit(&tog, 0);
-                }
-            }
         case SP_DV:
             if (record -> event.pressed) {
                 set_single_persistent_default_layer(_DVORAK);
@@ -300,25 +298,28 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             break;
         case KC_LSFT:
             if (record -> event.pressed) {
+                // Synthetic shifting needs to be interrupted if shift is actually pressed.
+                // We immediately stop regarding semi_colon as being pressed
                 register_code(KC_LSFT);
                 unregister_code(KC_COMMA);
-                clearBit(&opts, 5);
-
+                pressing_semi_colon = 0;
             } else {
+                // Here we need to reset our shifted up versioned keycodes
                 unregister_code(KC_LSFT);
-                // Unregister first special
+                // Unregister double quote
                 unregister_code(KC_2);
-                clearBit(&opts, 0);
+                pressing_double_quote = 0;
 
-                // Unregister second special
+                // Unregister right bracket
                 unregister_code(KC_NUBS);
-                clearBit(&opts, 2);
+                pressing_right_bracket = 0;
 
-                // Unregister third special
+                // Unregister regular colon
                 unregister_code(KC_DOT);
-                clearBit(&opts, 4);
+                pressing_reg_colon = 0;
+                // Unregister semi colon
                 unregister_code(KC_COMMA);
-                clearBit(&opts, 5);
+                pressing_semi_colon = 0;
             }
             break;
     }
