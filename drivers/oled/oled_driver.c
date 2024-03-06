@@ -947,9 +947,6 @@ void oled_task(void) {
     }
 #endif
 
-    // Smart render system, no need to check for dirty
-    oled_render();
-
     // Display timeout check
 #if OLED_TIMEOUT > 0
     if (oled_active && timer_expired32(timer_read32(), oled_timeout)) {

@@ -21,3 +21,6 @@
 # while we use the regular RGB underglow for testing
 RGB_MATRIX_ENABLE = no
 RGBLIGHT_ENABLE = no
+ENCODER_ENABLE = yes
+SRC += oled_impl.c
+SRC += encoder_impl.c

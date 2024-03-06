@@ -16,5 +16,10 @@
 
 #pragma once
 
-// I want OLED, don't know if this is necessary though
-#define OLED_ENABLE
+// Millis
+#define OLED_UPDATE_INTERVAL 50
+
+#define ENCODER_RESOLUTION 2
+
+// Need to propagate oled data to right side
+#define SPLIT_TRANSACTION_IDS_USER OLED_DATA_SYNC
