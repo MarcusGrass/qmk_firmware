@@ -8,7 +8,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB  , SH_APST, CM_LBR , DT_RBR , KC_P   , KC_Y   ,                                    KC_F   , KC_G   , KC_C   , KC_R   , KC_L   , KC_BSPC, \
         ESC_CTL , KC_A   , KC_O   , KC_E   , KC_U   , KC_I   ,                                    KC_D   , KC_H   , KC_T   , KC_N   , KC_S   , KC_ENT , \
         KC_LSFT , SCRC   , KC_Q   , KC_J   , KC_K   , KC_X   ,                                    KC_B   , KC_M   , KC_W   , KC_V   , KC_Z   , KC_LSFT, \
-        KC_LCTL , KC_LGUI, KC_LALT, KC_TRNS, LOWER  , KC_SPC , KC_LALT,                  KC_ALGR, KC_SPC , NUM    , RAISE  , KC_ALGR, SETTS  , KC_RCTL, \
+        KC_LCTL , KC_LGUI, KC_LALT, KC_TRNS, SP_LO  , KC_SPC , KC_LALT,                  KC_ALGR, KC_SPC , SP_NUM , SP_RA  , KC_ALGR, SP_SETT, KC_RCTL, \
                                     KC_TRNS, NO_UDSC, NO_UDSC, KC_LSFT,                  KC_TRNS, KC_TRNS, KC_BSPC, KC_TRNS                             \
         ),
 
@@ -16,7 +16,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB  , KC_QUOT, KC_COMM, KC_DOT , KC_P   , KC_Y   ,                                    KC_F   , KC_G   , KC_C   , KC_R   , KC_L   , KC_BSPC, \
         ESC_CTL , KC_A   , KC_O   , KC_E   , KC_U   , KC_I   ,                                    KC_D   , KC_H   , KC_T   , KC_N   , KC_S   , KC_ENT , \
         KC_LSFT , KC_SCLN, KC_Q   , KC_J   , KC_K   , KC_X   ,                                    KC_B   , KC_M   , KC_W   , KC_V   , KC_Z   , KC_LSFT, \
-        KC_LCTL , KC_LGUI, KC_LALT, KC_TRNS, LOWANS , KC_SPC , KC_LALT,                  KC_ALGR, KC_SPC , NUM    , RAISE  , KC_ALGR, SETTS  , KC_RCTL, \
+        KC_LCTL , KC_LGUI, KC_LALT, KC_TRNS, SP_LOAN, KC_SPC , KC_LALT,                  KC_ALGR, KC_SPC , SP_NUM , SP_RA  , KC_ALGR, SP_SETT, KC_RCTL, \
                                     KC_TRNS, AN_UDSC, AN_UDSC, KC_LSFT,                  KC_TRNS, KC_LSFT, KC_BSPC, KC_TRNS                             \
         ),
 
@@ -24,7 +24,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB  , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                                    KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSPC, \
         ESC_CTL , KC_A   , KC_S   , KC_D   , KC_F   , KC_G   ,                                    KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN, KC_ENT , \
         KC_LSFT , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                                    KC_N   , KC_M   , KC_COMM, KC_DOT , KC_QUOT, KC_LSFT, \
-        KC_LCTL , KC_LGUI, KC_LALT, KC_TRNS, LOWANS , KC_SPC , KC_LALT,                  KC_ALGR, KC_SPC , NUM    , RAISE  , KC_ALGR, SETTS  , KC_RCTL, \
+        KC_LCTL , KC_LGUI, KC_LALT, KC_TRNS, SP_LOAN, KC_SPC , KC_LALT,                  KC_ALGR, KC_SPC , SP_NUM , SP_RA  , KC_ALGR, SP_SETT, KC_RCTL, \
                                     KC_TRNS, AN_UDSC, AN_UDSC, KC_LSFT,                  KC_TRNS, KC_LSFT, KC_BSPC, KC_TRNS                             \
         ),
 
@@ -32,8 +32,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB  , KC_1   , KC_2   , KC_3   , KC_4   , KC_5   ,                                    KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , KC_BSPC, \
         ESC_CTL , KC_T   , KC_Q   , KC_W   , KC_E   , KC_R   ,                                    KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN, KC_ENT , \
         KC_LSFT , KC_Y   , KC_A   , KC_S   , KC_D   , KC_F   ,                                    KC_N   , KC_M   , KC_COMM, KC_DOT , KC_QUOT, KC_LSFT, \
-        KC_LCTL , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , KC_M   ,                  KC_O   , KC_G   , KC_I   , RAISE  , KC_ALGR, SETTS  , KC_RCTL, \
-                                    KC_LGUI, KC_LALT, KC_SPC , KC_TRNS,                  KC_TRNS, KC_U   , KC_P   , LOWER                               \
+        KC_LCTL , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , KC_M   ,                  KC_O   , KC_G   , KC_I   , SP_RA  , KC_ALGR, SP_SETT, KC_RCTL, \
+                                    KC_LGUI, KC_LALT, KC_SPC , KC_TRNS,                  KC_TRNS, KC_U   , KC_P   , SP_LO                               \
         ),
 
     [_LOWER] = LAYOUT( \
@@ -189,30 +189,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
             }
             break;
-        case SP_DV:
-            if (pressed) {
-                set_single_persistent_default_layer(_DVORAK);
-                oled_display_update_layer(_DVORAK);
-            }
-            break;
-        case SP_DVAN:
-            if (pressed) {
-                set_single_persistent_default_layer(_DVORAK_ANSI);
-                oled_display_update_layer(_DVORAK_ANSI);
-            }
-            break;
-        case SP_QW:
-            if (pressed) {
-                set_single_persistent_default_layer(_QWERTY_ANSI);
-                oled_display_update_layer(_QWERTY_ANSI);
-            }
-            break;
-        case SP_GAME:
-            if (pressed) {
-                set_single_persistent_default_layer(_QWERTY_GAMING);
-                oled_display_update_layer(_QWERTY_GAMING);
-            }
-            break;
         case KC_LSFT:
             oled_display_update_shift(pressed);
             if (pressed) {
@@ -243,6 +219,73 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_LCTL:
         case KC_RCTL:
             oled_display_update_ctrl(pressed);
+            break;
+        case SP_DV:
+            if (pressed) {
+                set_single_persistent_default_layer(_DVORAK);
+                oled_display_update_layer(_DVORAK);
+            }
+            break;
+        case SP_DVAN:
+            if (pressed) {
+                set_single_persistent_default_layer(_DVORAK_ANSI);
+                oled_display_update_layer(_DVORAK_ANSI);
+            }
+            break;
+        case SP_QW:
+            if (pressed) {
+                set_single_persistent_default_layer(_QWERTY_ANSI);
+                oled_display_update_layer(_QWERTY_ANSI);
+            }
+            break;
+        case SP_GAME:
+            if (pressed) {
+                set_single_persistent_default_layer(_QWERTY_GAMING);
+                oled_display_update_layer(_QWERTY_GAMING);
+            }
+            break;
+            // Momentary layers, could be buggy if default layer is switch while one of these are held.
+            // Because then these buttons will never be released.
+            // So don't do that because it doesn't make sense.
+        case SP_LO:
+            oled_display_update_momentary_layer(_LOWER, pressed);
+            if (pressed) {
+                layer_on(_LOWER);
+            } else {
+                layer_off(_LOWER);
+            }
+            break;
+        case SP_LOAN:
+            oled_display_update_momentary_layer(_LOWER_ANSI, pressed);
+            if (pressed) {
+                layer_on(_LOWER_ANSI);
+            } else {
+                layer_off(_LOWER_ANSI);
+            }
+            break;
+        case SP_RA:
+            oled_display_update_momentary_layer(_RAISE, pressed);
+            if (pressed) {
+                layer_on(_RAISE);
+            } else {
+                layer_off(_RAISE);
+            }
+            break;
+        case SP_NUM:
+            oled_display_update_momentary_layer(_NUM, pressed);
+            if (pressed) {
+                layer_on(_NUM);
+            } else {
+                layer_off(_NUM);
+            }
+            break;
+        case SP_SETT:
+            oled_display_update_momentary_layer(_SETTINGS, pressed);
+            if (pressed) {
+                layer_on(_SETTINGS);
+            } else {
+                layer_off(_SETTINGS);
+            }
             break;
     }
     return true;

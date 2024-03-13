@@ -45,9 +45,10 @@ static MUTEX_DECL(oled_data_mutex);
     }
 
 // One line is 5 chars, start line is where the header starts
-OLED_BUF_STRUCT(left_layer_oled_buffer, left_layer_buf, left_layer_buffer_commit, 2, "LAY", 6)
-OLED_BUF_STRUCT(left_shift_oled_buffer, left_shift_buf, left_shift_buffer_commit, 10, "SHIFT", 6)
-OLED_BUF_STRUCT(left_ctrl_oled_buff, left_ctrl_buf, left_ctrl_buffer_commit, 13, "CTRL", 6)
+OLED_BUF_STRUCT(left_layer_oled_buffer, left_layer_buf, left_layer_buffer_commit, 2, "MAP", 6)
+OLED_BUF_STRUCT(left_momentary_layer_oled_buffer, left_momentary_layer_buf, left_momentary_layer_buffer_commit, 5, "LAY", 6)
+OLED_BUF_STRUCT(left_shift_oled_buffer, left_shift_buf, left_shift_buffer_commit, 11, "SHIFT", 6)
+OLED_BUF_STRUCT(left_ctrl_oled_buff, left_ctrl_buf, left_ctrl_buffer_commit, 14, "CTRL", 6)
 
 static bool inline __attribute__((always_inline)) oled_write_layer_update_into_buffer(kb_layers layer, char buf[6]) {
     // I'm not dealing with null terminators anymore
@@ -82,6 +83,49 @@ void oled_display_update_layer(kb_layers layer) {
     if (is_keyboard_left()) {
         chMtxLock(&oled_data_mutex);
         left_layer_buf.header_needs_commit = oled_write_layer_update_into_buffer(layer, left_layer_buf.content);
+        chMtxUnlock(&oled_data_mutex);
+        oled_worker_wakeup();
+    }
+}
+static bool inline __attribute__((always_inline)) oled_write_momentary_layer_update_into_buffer(kb_layers layer, bool pressed, char buf[6]) {
+    // `[___]`, padded 2 spaces
+    const char NO_MO_LAYER[5] = {91, 95, 95, 95, 93};
+    // `LOWER`
+    const char LOWER_OUT[5] = {91, 76, 79, 87, 93};
+    // `RAISE`
+    const char RAISE_OUT[5] = {91, 82, 65, 73, 93};
+    // `NUM  `
+    const char NUM_OUT[5] = {91, 78, 85, 77, 93};
+    // `SETTS`
+    const char SETTINGS_OUT[5] = {91, 83, 69, 84, 93};
+    if (pressed) {
+        switch (layer) {
+            case _LOWER:
+            case _LOWER_ANSI:
+                memcpy(buf, LOWER_OUT, 5);
+                break;
+            case _RAISE:
+                memcpy(buf, RAISE_OUT, 5);
+                break;
+            case _NUM:
+                memcpy(buf, NUM_OUT, 5);
+                break;
+            case _SETTINGS:
+                memcpy(buf, SETTINGS_OUT, 5);
+                break;
+            default:
+                return false;
+        }
+    } else {
+        memcpy(buf, NO_MO_LAYER, 5);
+    }
+    return true;
+}
+
+void oled_display_update_momentary_layer(kb_layers layer, bool pressed) {
+    if (is_keyboard_left()) {
+        chMtxLock(&oled_data_mutex);
+        left_momentary_layer_buf.content_needs_commit = oled_write_momentary_layer_update_into_buffer(layer, pressed, left_momentary_layer_buf.content);
         chMtxUnlock(&oled_data_mutex);
         oled_worker_wakeup();
     }
@@ -132,6 +176,9 @@ bool oled_display_commit(void) {
             needs_render           = true;
         }
         if (left_layer_buffer_commit()) {
+            needs_render = true;
+        }
+        if (left_momentary_layer_buffer_commit()) {
             needs_render = true;
         }
         if (left_shift_buffer_commit()) {

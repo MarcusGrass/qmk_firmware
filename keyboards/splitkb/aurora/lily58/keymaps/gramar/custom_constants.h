@@ -11,15 +11,6 @@
 #    define NO_UDSC LSFT(NO_MINS) // _
 #    define AN_UDSC LSFT(KC_MINS) // _
 
-#    define LOWER MO(_LOWER)
-#    define LOWANS MO(_LOWER_ANSI)
-#    define RAISE MO(_RAISE)
-#    define NUM MO(_NUM)
-#    define SETTS MO(_SETTINGS)
-
-#    define CSE LCTL(LSFT(KC_ESC))
-#    define CAD LCTL(LALT(KC_DEL))
-#    define ALTINS LALT(KC_INS)
 #    define ESC_CTL MT(MOD_LCTL, KC_ESC)
 
 #    define _CUT LCTL(KC_C)
@@ -68,6 +59,11 @@ typedef enum {
     SP_DV,
     SP_DVAN,
     SP_QW,
-    SP_GAME
+    SP_GAME,
+    SP_LO,
+    SP_LOAN,
+    SP_RA,
+    SP_NUM,
+    SP_SETT,
 } custom_keycodes;
 #endif // QMK_FIRMWARE_CUSTOM_CONSTANTS_H
