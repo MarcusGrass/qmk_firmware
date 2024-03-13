@@ -192,21 +192,25 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case SP_DV:
             if (pressed) {
                 set_single_persistent_default_layer(_DVORAK);
+                oled_display_update_layer(_DVORAK);
             }
             break;
         case SP_DVAN:
             if (pressed) {
                 set_single_persistent_default_layer(_DVORAK_ANSI);
+                oled_display_update_layer(_DVORAK_ANSI);
             }
             break;
         case SP_QW:
             if (pressed) {
                 set_single_persistent_default_layer(_QWERTY_ANSI);
+                oled_display_update_layer(_QWERTY_ANSI);
             }
             break;
         case SP_GAME:
             if (pressed) {
                 set_single_persistent_default_layer(_QWERTY_GAMING);
+                oled_display_update_layer(_QWERTY_GAMING);
             }
             break;
         case KC_LSFT:
