@@ -88,16 +88,16 @@ void oled_display_update_layer(kb_layers layer) {
     }
 }
 static bool inline __attribute__((always_inline)) oled_write_momentary_layer_update_into_buffer(kb_layers layer, bool pressed, char buf[6]) {
-    // `[___]`, padded 2 spaces
-    const char NO_MO_LAYER[5] = {91, 95, 95, 95, 93};
+    // `NONE `, padded 1 spaces
+    const char NO_MO_LAYER[5] = {78, 79, 78, 69, ASCII_SPACE};
     // `LOWER`
-    const char LOWER_OUT[5] = {91, 76, 79, 87, 93};
+    const char LOWER_OUT[5] = {76, 79, 87, 69, 82};
     // `RAISE`
-    const char RAISE_OUT[5] = {91, 82, 65, 73, 93};
-    // `NUM  `
-    const char NUM_OUT[5] = {91, 78, 85, 77, 93};
+    const char RAISE_OUT[5] = {82, 65, 73, 83, 69};
+    // `NUM  `, padded 2 spaces
+    const char NUM_OUT[5] = {78, 85, 77, ASCII_SPACE, ASCII_SPACE};
     // `SETTS`
-    const char SETTINGS_OUT[5] = {91, 83, 69, 84, 93};
+    const char SETTINGS_OUT[5] = {83, 69, 84, 84, 83};
     if (pressed) {
         switch (layer) {
             case _LOWER:
