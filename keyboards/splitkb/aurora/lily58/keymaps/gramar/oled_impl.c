@@ -41,7 +41,7 @@ static MUTEX_DECL(oled_data_mutex);
             var_name.header_needs_commit = false;                                          \
             needs_render                 = true;                                           \
         }                                                                                  \
-        return needs_render;\
+        return needs_render;                                                               \
     }
 
 // One line is 5 chars, start line is where the header starts
@@ -198,9 +198,7 @@ bool oled_display_commit(void) {
     return needs_render;
 }
 
-
 static THD_WORKING_AREA(oled_writer_working_area, 1048);
-
 
 static THD_FUNCTION(oled_writer_worker, arg) {
     chMtxLock(&oled_data_mutex);
@@ -219,7 +217,6 @@ static THD_FUNCTION(oled_writer_worker, arg) {
 }
 
 // Worker thread handle
-
 void oled_worker_start(void) {
     static thread_t *worker_thread_handle = 0;
     if (!worker_thread_handle) {

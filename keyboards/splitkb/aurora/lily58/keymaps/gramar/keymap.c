@@ -81,6 +81,22 @@ void matrix_init_user(void) {}
 
 void matrix_scan_user(void) {}
 
+// Some code ripped from internals to make a proper layer state from a layer, if internals are changed, this is going to be spicy
+static layer_state_t inline __attribute__((always_inline)) state_from_layer(kb_layers layer) {
+    action_t      action = {.code = ACTION_DEFAULT_LAYER_SET(layer)};
+    uint8_t       shift  = action.layer_bitop.part * 4;
+    layer_state_t bits   = ((layer_state_t)action.layer_bitop.bits) << shift;
+    layer_state_t mask   = (action.layer_bitop.xbit) ? ~(((layer_state_t)0xf) << shift) : 0;
+    return bits | mask;
+}
+
+// If internals are changed and this becomes a bug, just change back to `set_single_persistent_default_layer(layer)`
+// not using it since it will eventually wear out the eeprom and I'd like the default layer to be the same at every start
+static void inline __attribute__((always_inline)) update_default_layer(kb_layers layer) {
+    layer_state_t layer_state = state_from_layer(layer);
+    default_layer_set(layer_state);
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // Turns out to probably be faster than bit shifting, this mc has the memory anyway
     static char pressing_double_quote  = 0;
@@ -222,31 +238,34 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             break;
         case SP_DV:
             if (pressed) {
-                set_single_persistent_default_layer(_DVORAK);
+                layer_clear();
+                update_default_layer(_DVORAK);
                 oled_display_update_layer(_DVORAK);
             }
             break;
         case SP_DVAN:
             if (pressed) {
-                set_single_persistent_default_layer(_DVORAK_ANSI);
+                layer_clear();
+                update_default_layer(_DVORAK_ANSI);
                 oled_display_update_layer(_DVORAK_ANSI);
             }
             break;
         case SP_QW:
             if (pressed) {
-                set_single_persistent_default_layer(_QWERTY_ANSI);
+                layer_clear();
+                update_default_layer(_QWERTY_ANSI);
                 oled_display_update_layer(_QWERTY_ANSI);
             }
             break;
         case SP_GAME:
             if (pressed) {
-                set_single_persistent_default_layer(_QWERTY_GAMING);
+                layer_clear();
+                update_default_layer(_QWERTY_GAMING);
                 oled_display_update_layer(_QWERTY_GAMING);
             }
             break;
-            // Momentary layers, could be buggy if default layer is switch while one of these are held.
-            // Because then these buttons will never be released.
-            // So don't do that because it doesn't make sense.
+            // Momentary layers, could be buggy if default layer is switched while one of these are held.
+            // Because then these buttons would never be released, however, layer_clear() is used to prevent that.
         case SP_LO:
             oled_display_update_momentary_layer(_LOWER, pressed);
             if (pressed) {
@@ -305,6 +324,7 @@ bool oled_task_user(void) {
 void keyboard_post_init_user(void) {
     // Set defaults on oled display
     oled_display_update_layer(_DVORAK);
+    oled_display_update_momentary_layer(_LOWER, false);
     oled_display_update_shift(false);
     oled_display_update_ctrl(false);
     oled_worker_start();
