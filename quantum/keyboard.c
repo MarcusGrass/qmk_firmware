@@ -537,6 +537,7 @@ static bool matrix_task(void) {
 
     matrix_scan();
     bool matrix_changed = false;
+    /*
     for (uint8_t row = 0; row < MATRIX_ROWS && !matrix_changed; row++) {
         matrix_changed |= matrix_previous[row] ^ matrix_get_row(row);
     }
@@ -552,6 +553,7 @@ static bool matrix_task(void) {
     if (debug_config.matrix) {
         matrix_print();
     }
+    */
 
     const bool process_keypress = should_process_keypress();
 
@@ -562,6 +564,7 @@ static bool matrix_task(void) {
         if (!row_changes || has_ghost_in_row(row, current_row)) {
             continue;
         }
+        matrix_changed = true;
 
         matrix_row_t col_mask = 1;
         for (uint8_t col = 0; col < MATRIX_COLS; col++, col_mask <<= 1) {
@@ -578,7 +581,9 @@ static bool matrix_task(void) {
 
         matrix_previous[row] = current_row;
     }
-
+    if (!matrix_changed) {
+        generate_tick_event();
+    }
     return matrix_changed;
 }
 
