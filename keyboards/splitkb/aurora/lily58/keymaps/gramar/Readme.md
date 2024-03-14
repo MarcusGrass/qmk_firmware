@@ -1,12 +1,12 @@
-# Custom nordic ansi-compatible keymap with some extras
-ooooooooooooooo
+# Custom nordic ansi-compatible keymap with SMP enabled
 
 This is my old iris-keyboard layout, ported to the lily58 with some added
-encoder and oled code.
+encoder, oled code, and most importantly multiprocessing.
 
 I haven't spent much effort with feature gating, so this only works
 with oled and encoders enabled, but that shouldn't be particularly hard to change
-if needed.
+if needed. It's likely more difficult to get this working on any keyboard because 
+of the multiprocessing.  
 
 ## Build info
 
@@ -54,17 +54,14 @@ The keymap uses two extras
 
 My keyboards have oled displays, so some features are relevant to those.
 
-#### CPM and WPM
+#### Left
 
-I wrote a simple CPM/WPM-implementation (different from the one QMK ships).
+On the left side the keymap, and momentary layers are displayed
 
-I later looked at it, and the implementation is fairly similar, it uses a
-ring-buffer and writes timestamps into that buffer, then calculates
-WPM from a rolling window.
+#### Right
 
-It takes CPM (actually presses per 10 seconds rolling interval), calculates WPM
-(just by dividing by 5), writes those into a buffer which is then mapped onto the oled display.
+On the right side, toggled shift or control is checked.
 
-#### Total keypresses
+### Encoder
 
-Just a simple counter with a `uint32_t`
+The right side encoder switches the default layer.
