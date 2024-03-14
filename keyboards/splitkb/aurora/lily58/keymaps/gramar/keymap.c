@@ -2,6 +2,7 @@
 #include "transactions.h"
 #include "custom_constants.h"
 #include "encoder_impl.h"
+#include "kb_util.h"
 #include "secondary_client.h"
 #include "split_transaction.h"
 
@@ -82,22 +83,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 void matrix_init_user(void) {}
 
 void matrix_scan_user(void) {}
-
-// Some code ripped from internals to make a proper layer state from a layer, if internals are changed, this is going to be spicy
-static layer_state_t inline __attribute__((always_inline)) state_from_layer(kb_layers layer) {
-    action_t      action = {.code = ACTION_DEFAULT_LAYER_SET(layer)};
-    uint8_t       shift  = action.layer_bitop.part * 4;
-    layer_state_t bits   = ((layer_state_t)action.layer_bitop.bits) << shift;
-    layer_state_t mask   = (action.layer_bitop.xbit) ? ~(((layer_state_t)0xf) << shift) : 0;
-    return bits | mask;
-}
-
-// If internals are changed and this becomes a bug, just change back to `set_single_persistent_default_layer(layer)`
-// not using it since it will eventually wear out the eeprom and I'd like the default layer to be the same at every start
-static void inline __attribute__((always_inline)) update_default_layer(kb_layers layer) {
-    layer_state_t layer_state = state_from_layer(layer);
-    default_layer_set(layer_state);
-}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // Turns out to probably be faster than bit shifting, this mc has the memory anyway

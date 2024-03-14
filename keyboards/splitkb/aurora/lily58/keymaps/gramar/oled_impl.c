@@ -20,18 +20,22 @@ void oled_write_default_layer(kb_layers layer) {
         case _DVORAK:
             oled_set_cursor(0, OLED_DEFAULT_LAYER_CONTENT_LINE);
             oled_write(DVORAK, false);
+            oled_render_dirty(true);
             break;
         case _DVORAK_ANSI:
             oled_set_cursor(0, OLED_DEFAULT_LAYER_CONTENT_LINE);
             oled_write(DVORANS, false);
+            oled_render_dirty(true);
             break;
         case _QWERTY_ANSI:
             oled_set_cursor(0, OLED_DEFAULT_LAYER_CONTENT_LINE);
             oled_write(QWERTY, false);
+            oled_render_dirty(true);
             break;
         case _QWERTY_GAMING:
             oled_set_cursor(0, OLED_DEFAULT_LAYER_CONTENT_LINE);
             oled_write(QWERTY_GM, false);
+            oled_render_dirty(true);
             break;
         default:
             break;
@@ -58,18 +62,22 @@ void oled_write_momentary_layer(kb_layers layer, bool pressed) {
             case _LOWER_ANSI:
                 oled_set_cursor(0, OLED_MOMENTARY_LAYER_CONTENT_LINE);
                 oled_write(LOWER_OUT, false);
+                oled_render_dirty(true);
                 break;
             case _RAISE:
                 oled_set_cursor(0, OLED_MOMENTARY_LAYER_CONTENT_LINE);
                 oled_write(RAISE_OUT, false);
+                oled_render_dirty(true);
                 break;
             case _NUM:
                 oled_set_cursor(0, OLED_MOMENTARY_LAYER_CONTENT_LINE);
                 oled_write(NUM_OUT, false);
+                oled_render_dirty(true);
                 break;
             case _SETTINGS:
                 oled_set_cursor(0, OLED_MOMENTARY_LAYER_CONTENT_LINE);
                 oled_write(SETTINGS_OUT, false);
+                oled_render_dirty(true);
                 break;
             default:
                 break;
@@ -77,6 +85,7 @@ void oled_write_momentary_layer(kb_layers layer, bool pressed) {
     } else {
         oled_set_cursor(0, OLED_MOMENTARY_LAYER_CONTENT_LINE);
         oled_write(NO_MO_LAYER, false);
+        oled_render_dirty(true);
     }
 }
 
@@ -92,6 +101,7 @@ static void inline __attribute__((always_inline)) oled_write_checked_at(bool che
         oled_set_cursor(0, line);
         oled_write(_UNCHECKED, false);
     }
+    oled_render_dirty(true);
 }
 
 const uint8_t OLED_SHIFT_START_LINE = 2;
@@ -99,6 +109,7 @@ const uint8_t OLED_SHIFT_CONTENT_LINE = 4;
 
 void oled_write_shift_update(bool pressed) {
     oled_write_checked_at(pressed, OLED_SHIFT_CONTENT_LINE);
+    oled_render_dirty(true);
 }
 
 const uint8_t OLED_CTRL_START_LINE = 6;
@@ -106,6 +117,7 @@ const uint8_t OLED_CTRL_CONTENT_LINE = 8;
 
 void oled_write_ctrl_update(bool pressed) {
     oled_write_checked_at(pressed, OLED_CTRL_CONTENT_LINE);
+    oled_render_dirty(true);
 }
 
 static void oled_write_separator_line_after(uint8_t line) {
@@ -146,4 +158,5 @@ void oled_write_initial_state(void) {
         oled_write_ctrl_update(false);
         oled_write_separator_line_after(OLED_CTRL_CONTENT_LINE + 1);
     }
+    oled_render_dirty(true);
 }

@@ -8,7 +8,6 @@
 #include "oled_impl.h"
 
 void worker_run(void) {
-    bool is_left = is_keyboard_left();
     while(1) {
         render_msg next_msg = await_next_message_on_queue();
         switch (next_msg.kind) {
@@ -26,7 +25,7 @@ void worker_run(void) {
                 break;
             case 4:
                 bool pressed_shift = next_msg.msg.shift.pressed;
-                if (is_left) {
+                if (is_keyboard_left()) {
                     left_side_submit_shift_transaction(pressed_shift);
                 } else {
                     oled_write_shift_update(pressed_shift);
@@ -34,7 +33,7 @@ void worker_run(void) {
                 break;
             case 5:
                 bool pressed_ctrl = next_msg.msg.ctrl.pressed;
-                if (is_left) {
+                if (is_keyboard_left()) {
                     left_side_submit_ctrl_transaction(pressed_ctrl);
                 } else {
                     oled_write_ctrl_update(pressed_ctrl);
