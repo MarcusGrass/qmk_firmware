@@ -12,5 +12,4 @@ void worker_submit_momentary_layer_change(kb_layers layer, bool pressed);
 void worker_submit_shift(bool pressed);
 void worker_submit_ctrl(bool pressed);
 
-
 #endif // QMK_FIRMWARE_SECONDARY_CLIENT_H

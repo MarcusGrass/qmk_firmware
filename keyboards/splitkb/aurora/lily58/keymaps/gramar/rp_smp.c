@@ -14,8 +14,8 @@ static CONDVAR_DECL(queue_condvar);
 
 typedef struct {
     render_msg messages[_RENDER_MSG_CAP];
-    uint8_t offset;
-    uint8_t count;
+    uint8_t    offset;
+    uint8_t    count;
 } render_message_queue;
 
 static render_message_queue RENDER_MESSAGE_QUEUE = {{{0}}, 0, 0};

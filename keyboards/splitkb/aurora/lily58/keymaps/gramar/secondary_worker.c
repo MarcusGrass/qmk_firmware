@@ -8,7 +8,7 @@
 #include "oled_impl.h"
 
 void worker_run(void) {
-    while(1) {
+    while (1) {
         render_msg next_msg = await_next_message_on_queue();
         switch (next_msg.kind) {
             case 1:
@@ -20,7 +20,7 @@ void worker_run(void) {
                 break;
             case 3:
                 kb_layers mo_layer = (kb_layers)next_msg.msg.mo_layer.layer;
-                bool pressed = next_msg.msg.mo_layer.pressed;
+                bool      pressed  = next_msg.msg.mo_layer.pressed;
                 oled_write_momentary_layer(mo_layer, pressed);
                 break;
             case 4:

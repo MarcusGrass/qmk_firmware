@@ -3,7 +3,7 @@
 //
 #include "custom_constants.h"
 #ifndef QMK_FIRMWARE_OLED_IMPL_H
-#define QMK_FIRMWARE_OLED_IMPL_H
+#    define QMK_FIRMWARE_OLED_IMPL_H
 // new
 void oled_write_default_layer(kb_layers layer);
 void oled_write_momentary_layer(kb_layers layer, bool pressed);

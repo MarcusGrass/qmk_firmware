@@ -6,12 +6,12 @@
 #include "split_transaction.h"
 #include "transactions.h"
 
-void right_side_transaction_handler(uint8_t in_buflen, const void* in_data) {
+void right_side_transaction_handler(uint8_t in_buflen, const void *in_data) {
     uint8_t len = in_buflen / sizeof(transaction_sync_msg);
     if (len < 1) {
         return;
     }
-    const transaction_sync_msg *messages = (const transaction_sync_msg*) in_data;
+    const transaction_sync_msg *messages = (const transaction_sync_msg *)in_data;
     for (uint8_t i = 0; i < len; ++i) {
         transaction_sync_msg msg = messages[i];
         switch (msg.kind) {

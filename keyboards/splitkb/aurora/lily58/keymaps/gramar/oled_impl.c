@@ -4,7 +4,7 @@
 
 #include "custom_constants.h"
 
-const uint8_t OLED_DEFAULT_LAYER_START_LINE = 2;
+const uint8_t OLED_DEFAULT_LAYER_START_LINE   = 2;
 const uint8_t OLED_DEFAULT_LAYER_CONTENT_LINE = 4;
 
 void oled_write_default_layer(kb_layers layer) {
@@ -42,7 +42,7 @@ void oled_write_default_layer(kb_layers layer) {
     }
 }
 
-const uint8_t OLED_MOMENTARY_LAYER_START_LINE = 6;
+const uint8_t OLED_MOMENTARY_LAYER_START_LINE   = 6;
 const uint8_t OLED_MOMENTARY_LAYER_CONTENT_LINE = 8;
 
 void oled_write_momentary_layer(kb_layers layer, bool pressed) {
@@ -104,15 +104,16 @@ static void inline __attribute__((always_inline)) oled_write_checked_at(bool che
     oled_render_dirty(true);
 }
 
-const uint8_t OLED_SHIFT_START_LINE = 2;
+const uint8_t OLED_SHIFT_START_LINE   = 2;
 const uint8_t OLED_SHIFT_CONTENT_LINE = 4;
 
 void oled_write_shift_update(bool pressed) {
+
     oled_write_checked_at(pressed, OLED_SHIFT_CONTENT_LINE);
     oled_render_dirty(true);
 }
 
-const uint8_t OLED_CTRL_START_LINE = 6;
+const uint8_t OLED_CTRL_START_LINE   = 6;
 const uint8_t OLED_CTRL_CONTENT_LINE = 8;
 
 void oled_write_ctrl_update(bool pressed) {

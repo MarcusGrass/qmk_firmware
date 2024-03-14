@@ -12,8 +12,8 @@ typedef union {
         uint8_t layer;
     } df_layer;
     struct momentary_layer {
-        uint8_t layer: 4;
-        uint8_t pressed: 4;
+        uint8_t layer : 4;
+        uint8_t pressed : 4;
     } mo_layer;
     struct shift_kind {
         uint8_t pressed;
@@ -24,7 +24,7 @@ typedef union {
 } render_msg_kind;
 
 typedef struct {
-    uint8_t kind;
+    uint8_t         kind;
     render_msg_kind msg;
 } render_msg;
 
