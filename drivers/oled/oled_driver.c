@@ -932,11 +932,11 @@ void oled_task(void) {
 #if OLED_UPDATE_INTERVAL > 0
     if (timer_elapsed(oled_update_timeout) >= OLED_UPDATE_INTERVAL) {
         oled_update_timeout = timer_read();
-        oled_set_cursor(0, 0);
+        //oled_set_cursor(0, 0);
         oled_task_kb();
     }
 #else
-    oled_set_cursor(0, 0);
+    //oled_set_cursor(0, 0);
     oled_task_kb();
 #endif
 
