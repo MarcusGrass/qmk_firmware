@@ -25,12 +25,12 @@ void right_side_transaction_handler(uint8_t in_buflen, const void* in_data) {
     }
 }
 
-void left_side_submit_shift(bool pressed) {
+void left_side_submit_shift_transaction(bool pressed) {
     transaction_sync_msg msg = {1, pressed};
     transaction_rpc_send(OLED_DATA_SYNC, sizeof(msg), &msg);
 }
 
-void left_side_submit_ctrl(bool pressed) {
+void left_side_submit_ctrl_transaction(bool pressed) {
     transaction_sync_msg msg = {2, pressed};
     transaction_rpc_send(OLED_DATA_SYNC, sizeof(msg), &msg);
 }

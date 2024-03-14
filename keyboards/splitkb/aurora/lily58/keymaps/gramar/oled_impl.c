@@ -2,28 +2,7 @@
 // Created by gramar on 3/7/24.
 //
 
-#include "ch.h"
-#include "transactions.h"
 #include "custom_constants.h"
-
-// Mutex for data manipulation
-static MUTEX_DECL(oled_data_mutex);
-
-static CONDVAR_DECL(oled_data_condvar);
-
-/*
-static void oled_write_separator_line_after(uint8_t line) {
-    // 8 pixels line height, plus half a line
-    uint8_t y = line * 8 + 3;
-    if (y >= 128) {
-        return;
-    }
-    // 32 pixels per line
-    for (uint8_t x = 0; x < 32; ++x) {
-        oled_write_pixel(x, y, true);
-    }
-}
- */
 
 const uint8_t OLED_DEFAULT_LAYER_START_LINE = 2;
 const uint8_t OLED_DEFAULT_LAYER_CONTENT_LINE = 4;
@@ -127,4 +106,44 @@ const uint8_t OLED_CTRL_CONTENT_LINE = 8;
 
 void oled_write_ctrl_update(bool pressed) {
     oled_write_checked_at(pressed, OLED_CTRL_CONTENT_LINE);
+}
+
+static void oled_write_separator_line_after(uint8_t line) {
+    // 8 pixels line height, plus half a line
+    uint8_t y = line * 8 + 3;
+    if (y >= 128) {
+        return;
+    }
+    // 32 pixels per line
+    for (uint8_t x = 0; x < 32; ++x) {
+        oled_write_pixel(x, y, true);
+    }
+}
+
+void oled_write_initial_state(void) {
+    // Also resets cursor
+    oled_clear();
+    if (is_keyboard_left()) {
+        oled_write("LEFT ", false);
+        oled_write_separator_line_after(1);
+        oled_set_cursor(0, OLED_DEFAULT_LAYER_START_LINE);
+        oled_write("MAP   ", false);
+        oled_write_default_layer(_DVORAK);
+        oled_write_separator_line_after(OLED_DEFAULT_LAYER_CONTENT_LINE + 1);
+        oled_set_cursor(0, OLED_MOMENTARY_LAYER_START_LINE);
+        oled_write("LAYER ", false);
+        oled_write_momentary_layer(_LOWER, false);
+        oled_write_separator_line_after(OLED_MOMENTARY_LAYER_CONTENT_LINE + 1);
+    } else {
+        oled_write("RIGHT", false);
+        oled_write_separator_line_after(1);
+        oled_set_cursor(0, OLED_SHIFT_START_LINE);
+        oled_write("SHIFT", false);
+        oled_write_shift_update(false);
+        oled_write_separator_line_after(OLED_SHIFT_CONTENT_LINE + 1);
+        oled_set_cursor(0, OLED_CTRL_START_LINE);
+        oled_write("CTRL ", false);
+        oled_write_ctrl_update(false);
+        oled_write_separator_line_after(OLED_CTRL_CONTENT_LINE + 1);
+    }
 }

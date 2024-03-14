@@ -8,9 +8,9 @@
 
 #define _RENDER_MSG_CAP 16
 // Mutex for data manipulation
-static MUTEX_DECL(oled_data_mutex);
+static MUTEX_DECL(queue_mutex);
 
-static CONDVAR_DECL(oled_data_condvar);
+static CONDVAR_DECL(queue_condvar);
 
 typedef struct {
     render_msg messages[_RENDER_MSG_CAP];
@@ -23,9 +23,10 @@ static render_message_queue RENDER_MESSAGE_QUEUE = {{{0}}, 0, 0};
 // Core 0 pushes message to the render queue
 void push_message_to_queue(render_msg msg) {
     // Lock mutex
-    chMtxLock(&oled_data_mutex);
+    chMtxLock(&queue_mutex);
     if (RENDER_MESSAGE_QUEUE.count >= _RENDER_MSG_CAP) {
-        // Not much to do, early exit if full
+        // Not much to do, drop the message and unlock and exit
+        chMtxUnlock(&queue_mutex);
         return;
     }
     // The next open slot is the start offset + count, since
@@ -38,18 +39,19 @@ void push_message_to_queue(render_msg msg) {
     RENDER_MESSAGE_QUEUE.messages[next_offset] = msg;
     // Increment count to move the next open slot
     RENDER_MESSAGE_QUEUE.count += 1;
-    chCondSignal(&oled_data_condvar);
+    // Wake up worker
+    chCondSignal(&queue_condvar);
     // Release lock
-    chMtxUnlock(&oled_data_mutex);
+    chMtxUnlock(&queue_mutex);
 }
 
 // Core 1 pops messages off the queue
 render_msg await_next_message_on_queue(void) {
     // Lock mutex
-    chMtxLock(&oled_data_mutex);
+    chMtxLock(&queue_mutex);
     // While count is 0, wait for condvar to get notified
     while (RENDER_MESSAGE_QUEUE.count == 0) {
-        chCondWait(&oled_data_condvar);
+        chCondWait(&queue_condvar);
     }
     render_msg msg;
     // Copy the message at the current offset into the receiver
@@ -65,6 +67,6 @@ render_msg await_next_message_on_queue(void) {
     // Decrement count, definitely larger than 0 before this
     RENDER_MESSAGE_QUEUE.count -= 1;
     // Unlock no wakeup, this is Core 1
-    chMtxUnlock(&oled_data_mutex);
+    chMtxUnlock(&queue_mutex);
     return msg;
 }
