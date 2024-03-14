@@ -21,7 +21,7 @@ typedef struct {
 static render_message_queue RENDER_MESSAGE_QUEUE = {{{0}}, 0, 0};
 
 // Core 0 pushes message to the render queue
-void push_message(render_msg msg) {
+void push_message_to_queue(render_msg msg) {
     // Lock mutex
     chMtxLock(&oled_data_mutex);
     if (RENDER_MESSAGE_QUEUE.count >= _RENDER_MSG_CAP) {

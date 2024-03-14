@@ -12,4 +12,6 @@ void oled_display_update_ctrl(bool pressed);
 void oled_worker_start(void);
 void oled_handle_sync(uint8_t in_buflen, const void* in_data);
 void oled_worker_run(void);
+// new
+void oled_write_default_layer(kb_layers layer);
 #endif // QMK_FIRMWARE_OLED_IMPL_H

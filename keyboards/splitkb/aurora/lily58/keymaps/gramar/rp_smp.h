@@ -4,6 +4,7 @@
 
 #ifndef QMK_FIRMWARE_RP_SMP_H
 #define QMK_FIRMWARE_RP_SMP_H
+#include "custom_constants.h"
 typedef union {
     struct init_oled_state {
     } init;
@@ -11,7 +12,8 @@ typedef union {
         uint8_t layer;
     } df_layer;
     struct momentary_layer {
-        uint8_t layer;
+        uint8_t layer: 4;
+        uint8_t pressed: 4;
     } mo_layer;
     struct shift_kind {
         uint8_t pressed;

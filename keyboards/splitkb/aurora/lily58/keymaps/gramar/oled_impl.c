@@ -82,6 +82,39 @@ OLED_BUF_STRUCT(left_momentary_layer_oled_buffer, left_momentary_layer_buf, left
 OLED_BUF_STRUCT(right_shift_oled_buffer, right_shift_buf, right_shift_buffer_commit, 2, "SHIFT", 6)
 OLED_BUF_STRUCT(right_ctrl_oled_buffer, right_ctrl_buf, right_ctrl_buffer_commit, 6, "CTRL", 6)
 
+const uint8_t OLED_DEFAULT_LAYER_START_LINE = 2;
+const uint8_t OLED_DEFAULT_LAYER_HEADER_LINE = 4;
+
+void oled_write_default_layer(kb_layers layer) {
+    // `DV   ` padded by 3 spaces
+    const char DVORAK[6] = "DV   ";
+    // `DV-AN`
+    const char DVORANS[6] = "DV-AN";
+    // `QW-AN`
+    const char QWERTY[6] = "QW-AN";
+    // `QW-GM`
+    const char QWERTY_GM[6] = "QW-GM";
+    switch (layer) {
+        case _DVORAK:
+            oled_set_cursor(0, OLED_DEFAULT_LAYER_START_LINE);
+            oled_write(DVORAK, false);
+            break;
+        case _DVORAK_ANSI:
+            oled_set_cursor(0, OLED_DEFAULT_LAYER_START_LINE);
+            oled_write(DVORANS, false);
+            break;
+        case _QWERTY_ANSI:
+            oled_set_cursor(0, OLED_DEFAULT_LAYER_START_LINE);
+            oled_write(QWERTY, false);
+            break;
+        case _QWERTY_GAMING:
+            oled_set_cursor(0, OLED_DEFAULT_LAYER_START_LINE);
+            oled_write(QWERTY_GM, false);
+            break;
+        default:
+            break;
+    }
+}
 
 static bool inline __attribute__((always_inline)) oled_write_layer_update_into_buffer(kb_layers layer, char buf[6]) {
     // I'm not dealing with null terminators anymore

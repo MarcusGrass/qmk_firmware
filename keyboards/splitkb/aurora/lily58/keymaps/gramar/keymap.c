@@ -2,6 +2,7 @@
 #include "transactions.h"
 #include "custom_constants.h"
 #include "encoder_impl.h"
+#include "secondary_client.h"
 #include "oled_impl.h"
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -207,7 +208,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             break;
         case KC_LSFT:
-            oled_display_update_shift(pressed);
+            worker_submit_shift(pressed);
             if (pressed) {
                 // Synthetic shifting needs to be interrupted if shift is actually pressed.
                 // We immediately stop regarding semi_colon as being pressed
@@ -235,40 +236,40 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             break;
         case KC_LCTL:
         case KC_RCTL:
-            oled_display_update_ctrl(pressed);
+            worker_submit_ctrl(pressed);
             break;
         case SP_DV:
             if (pressed) {
                 layer_clear();
                 update_default_layer(_DVORAK);
-                oled_display_update_layer(_DVORAK);
+                worker_submit_default_layer_change(_DVORAK);
             }
             break;
         case SP_DVAN:
             if (pressed) {
                 layer_clear();
                 update_default_layer(_DVORAK_ANSI);
-                oled_display_update_layer(_DVORAK_ANSI);
+                worker_submit_default_layer_change(_DVORAK_ANSI);
             }
             break;
         case SP_QW:
             if (pressed) {
                 layer_clear();
                 update_default_layer(_QWERTY_ANSI);
-                oled_display_update_layer(_QWERTY_ANSI);
+                worker_submit_default_layer_change(_QWERTY_ANSI);
             }
             break;
         case SP_GAME:
             if (pressed) {
                 layer_clear();
                 update_default_layer(_QWERTY_GAMING);
-                oled_display_update_layer(_QWERTY_GAMING);
+                worker_submit_default_layer_change(_QWERTY_GAMING);
             }
             break;
             // Momentary layers, could be buggy if default layer is switched while one of these are held.
             // Because then these buttons would never be released, however, layer_clear() is used to prevent that.
         case SP_LO:
-            oled_display_update_momentary_layer(_LOWER, pressed);
+            worker_submit_momentary_layer_change(_LOWER, pressed);
             if (pressed) {
                 layer_on(_LOWER);
             } else {
@@ -276,7 +277,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             break;
         case SP_LOAN:
-            oled_display_update_momentary_layer(_LOWER_ANSI, pressed);
+            worker_submit_momentary_layer_change(_LOWER_ANSI, pressed);
             if (pressed) {
                 layer_on(_LOWER_ANSI);
             } else {
@@ -284,7 +285,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             break;
         case SP_RA:
-            oled_display_update_momentary_layer(_RAISE, pressed);
+            worker_submit_momentary_layer_change(_RAISE, pressed);
             if (pressed) {
                 layer_on(_RAISE);
             } else {
@@ -292,7 +293,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             break;
         case SP_NUM:
-            oled_display_update_momentary_layer(_NUM, pressed);
+            worker_submit_momentary_layer_change(_NUM, pressed);
             if (pressed) {
                 layer_on(_NUM);
             } else {
@@ -300,7 +301,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             break;
         case SP_SETT:
-            oled_display_update_momentary_layer(_SETTINGS, pressed);
+            worker_submit_momentary_layer_change(_SETTINGS, pressed);
             if (pressed) {
                 layer_on(_SETTINGS);
             } else {
@@ -328,12 +329,8 @@ void oled_data_sync_handler(uint8_t in_buflen, const void* in_data, uint8_t out_
 
 void keyboard_post_init_user(void) {
     // Set defaults on oled display
-    oled_display_update_layer(_DVORAK);
-    oled_display_update_momentary_layer(_LOWER, false);
-    oled_display_update_shift(false);
-    oled_display_update_ctrl(false);
     if (!is_keyboard_left()) {
         transaction_register_rpc(OLED_DATA_SYNC, oled_data_sync_handler);
     }
-    oled_worker_start();
+    worker_submit_init_message();
 }
