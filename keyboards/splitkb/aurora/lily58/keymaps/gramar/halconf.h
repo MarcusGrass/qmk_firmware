@@ -1,4 +1,4 @@
-/* Copyright 2022 splitkb.com <support@splitkb.com>
+/* Copyright 2022 Yiancar-Designs
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,4 @@
 
 #pragma once
 
-// Millis
-#define OLED_UPDATE_INTERVAL 50
-#define OLED_SCROLL_TIMEOUT 0
-
-#define ENCODER_RESOLUTION 2
-
-// Need to propagate oled data to right side
-#define SPLIT_TRANSACTION_IDS_USER OLED_DATA_SYNC
+#include_next "halconf.h"

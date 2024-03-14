@@ -1,4 +1,5 @@
 #include QMK_KEYBOARD_H
+#include "transactions.h"
 #include "custom_constants.h"
 #include "encoder_impl.h"
 #include "oled_impl.h"
@@ -321,11 +322,18 @@ bool oled_task_user(void) {
     return false;
 }
 
+void oled_data_sync_handler(uint8_t in_buflen, const void* in_data, uint8_t out_buflen, void* out_data) {
+    oled_handle_sync(in_buflen, in_data);
+}
+
 void keyboard_post_init_user(void) {
     // Set defaults on oled display
     oled_display_update_layer(_DVORAK);
     oled_display_update_momentary_layer(_LOWER, false);
     oled_display_update_shift(false);
     oled_display_update_ctrl(false);
+    if (!is_keyboard_left()) {
+        transaction_register_rpc(OLED_DATA_SYNC, oled_data_sync_handler);
+    }
     oled_worker_start();
 }
