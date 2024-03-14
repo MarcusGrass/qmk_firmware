@@ -3,7 +3,7 @@
 #include "custom_constants.h"
 #include "encoder_impl.h"
 #include "secondary_client.h"
-#include "oled_impl.h"
+#include "split_transaction.h"
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_DVORAK] = LAYOUT( \
@@ -323,14 +323,14 @@ bool oled_task_user(void) {
     return false;
 }
 
-void oled_data_sync_handler(uint8_t in_buflen, const void* in_data, uint8_t out_buflen, void* out_data) {
-    oled_handle_sync(in_buflen, in_data);
+void transaction_handler(uint8_t in_buflen, const void* in_data, uint8_t out_buflen, void* out_data) {
+    right_side_transaction_handler(in_buflen, in_data);
 }
 
 void keyboard_post_init_user(void) {
     // Set defaults on oled display
     if (!is_keyboard_left()) {
-        transaction_register_rpc(OLED_DATA_SYNC, oled_data_sync_handler);
+        transaction_register_rpc(OLED_DATA_SYNC, transaction_handler);
     }
     worker_submit_init_message();
 }

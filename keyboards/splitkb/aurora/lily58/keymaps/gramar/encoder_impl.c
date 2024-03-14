@@ -5,7 +5,7 @@
 #include QMK_KEYBOARD_H
 #include "custom_constants.h"
 #include "encoder_impl.h"
-#include "oled_impl.h"
+#include "secondary_client.h"
 
 const kb_layers PROGMEM CYCLE_LAYERS[] = {_DVORAK, _DVORAK_ANSI, _QWERTY_ANSI, _QWERTY_GAMING};
 
@@ -27,6 +27,6 @@ void encoder_update(uint8_t index, bool clockwise) {
             }
         }
         set_single_persistent_default_layer(CYCLE_LAYERS[encoder_layer_index]);
-        oled_display_update_layer(CYCLE_LAYERS[encoder_layer_index]);
+        worker_submit_default_layer_change(CYCLE_LAYERS[encoder_layer_index]);
     }
 }

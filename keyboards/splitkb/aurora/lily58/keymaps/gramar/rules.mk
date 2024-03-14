@@ -28,3 +28,4 @@ SRC += rp_smp.c
 SRC += secondary_client.c
 SRC += secondary_worker.c
 SRC += secondary_core.c
+SRC += split_transaction.c
