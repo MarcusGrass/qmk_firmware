@@ -37,7 +37,6 @@ typedef struct {
     uint8_t pressed;
 } oled_sync_msg;
 
-
 // Define a buffer struct that defines a local buffer to which it can write its content, and a function which commits that to
 // the correct place on the oled.
 // On data that's updated faster than `OLED_UPDATE_INTERVAL` it prevents unnecessary calls to write to the
@@ -71,11 +70,9 @@ typedef struct {
 // One line is 5 chars, start line is where the header starts
 OLED_BUF_STRUCT(left_layer_oled_buffer, left_layer_buf, left_layer_buffer_commit, 2, "MAP", 6)
 OLED_BUF_STRUCT(left_momentary_layer_oled_buffer, left_momentary_layer_buf, left_momentary_layer_buffer_commit, 6, "LAY", 6)
-OLED_BUF_STRUCT(left_dbg_oled_buffer, left_dbg_buf, left_dbg_buffer_commit, 10, "DBG", 10)
 
 OLED_BUF_STRUCT(right_shift_oled_buffer, right_shift_buf, right_shift_buffer_commit, 2, "SHIFT", 6)
 OLED_BUF_STRUCT(right_ctrl_oled_buffer, right_ctrl_buf, right_ctrl_buffer_commit, 6, "CTRL", 6)
-OLED_BUF_STRUCT(right_dbg_oled_buffer, right_dbg_buf, right_dbg_buffer_commit, 10, "DBG", 11)
 
 
 static bool inline __attribute__((always_inline)) oled_write_layer_update_into_buffer(kb_layers layer, char buf[6]) {
@@ -109,11 +106,14 @@ static bool inline __attribute__((always_inline)) oled_write_layer_update_into_b
 
 void oled_display_update_layer(kb_layers layer) {
     if (is_keyboard_left()) {
+        // Only on the left side, write into the in-mem buffer, then signal core 2 to wake up and write to the oled buffer
         oled_shared_data_lock();
         left_layer_buf.header_needs_commit = oled_write_layer_update_into_buffer(layer, left_layer_buf.content);
         oled_shared_data_release();
     }
 }
+
+// Write layer data into the provided buffer
 static bool inline __attribute__((always_inline)) oled_write_momentary_layer_update_into_buffer(kb_layers layer, bool pressed, char buf[6]) {
     // `NONE `, padded 1 spaces
     const char NO_MO_LAYER[5] = {78, 79, 78, 69, ASCII_SPACE};
@@ -151,6 +151,7 @@ static bool inline __attribute__((always_inline)) oled_write_momentary_layer_upd
 
 void oled_display_update_momentary_layer(kb_layers layer, bool pressed) {
     if (is_keyboard_left()) {
+        // Only displayed on left, just lock the in-mem buffer, write the new data into it, then signal core 2 to wake up and write it to the oled buffer
         oled_shared_data_lock();
         left_momentary_layer_buf.content_needs_commit = oled_write_momentary_layer_update_into_buffer(layer, pressed, left_momentary_layer_buf.content);
         oled_shared_data_release();
@@ -173,13 +174,16 @@ static void inline __attribute__((always_inline)) oled_write_checked_modifier_in
 // NEEDS MUTEX LOCK ON RW
 static oled_sync_msg needs_send_shift = { 0, 0};
 
+// Update shift checkbox
 void oled_display_update_shift(bool pressed) {
     if (is_keyboard_left()) {
+        // On left keyboard, signal to core 2 that a transaction should go out
         oled_shared_data_lock();
         needs_send_shift.kind = 1;
         needs_send_shift.pressed = (uint8_t)pressed;
         oled_shared_data_release();
     } else {
+        // On right keyboard, write to in-mem buffer, signal oled-thread to write into the oled buffer by waking it up after changing state
         oled_shared_data_lock();
         oled_write_checked_modifier_into_buffer(pressed, right_shift_buf.content);
         right_shift_buf.content_needs_commit = true;
@@ -190,13 +194,16 @@ void oled_display_update_shift(bool pressed) {
 // NEEDS MUTEX LOCK ON RW
 static oled_sync_msg needs_send_ctrl = { 0, 0};
 
+// Update shift checkbox
 void oled_display_update_ctrl(bool pressed) {
     if (is_keyboard_left()) {
+        // On left keyboard, signal to core 2 that a transaction should go out
         oled_shared_data_lock();
         needs_send_ctrl.kind = 2;
         needs_send_ctrl.pressed = (uint8_t)pressed;
         oled_shared_data_release();
     } else {
+        // On right keyboard, write to in-mem buffer, signal oled-thread to write into the oled buffer by waking it up after changing state
         oled_shared_data_lock();
         oled_write_checked_modifier_into_buffer(pressed, right_ctrl_buf.content);
         right_ctrl_buf.content_needs_commit = true;
@@ -204,11 +211,13 @@ void oled_display_update_ctrl(bool pressed) {
     }
 }
 
+// On the right side, synced data comes through function, called by core 0
 void oled_handle_sync(uint8_t in_buflen, const void* in_data) {
     uint8_t len = in_buflen / sizeof(oled_sync_msg);
     if (!len) {
         return;
     }
+    // Don't know if this can actually have a len != 1, but whatever
     const oled_sync_msg *msg = (const oled_sync_msg*) in_data;
     for (uint8_t i = 0; i < len; ++i) {
         const oled_sync_msg use_msg = msg[i];
@@ -224,8 +233,10 @@ void oled_handle_sync(uint8_t in_buflen, const void* in_data) {
 
 }
 
-// NEEDS LOCK
+// NEEDS LOCK SHARED MEMORY
+// Commits the buffer data into oled memory
 bool oled_display_commit(void) {
+    // Only commit these once to the oled state
     static bool left_oled_needs_header  = true;
     static bool right_oled_needs_header = true;
     bool        needs_render            = false;
@@ -244,9 +255,6 @@ bool oled_display_commit(void) {
         if (left_momentary_layer_buffer_commit()) {
             needs_render = true;
         }
-        if (left_dbg_buffer_commit()) {
-            needs_render = true;
-        }
 
     } else {
         if (right_oled_needs_header) {
@@ -260,9 +268,6 @@ bool oled_display_commit(void) {
             needs_render = true;
         }
         if (right_ctrl_buffer_commit()) {
-            needs_render = true;
-        }
-        if (right_dbg_buffer_commit()) {
             needs_render = true;
         }
     }
@@ -286,8 +291,9 @@ static void inline __attribute__((always_inline)) oled_send_transactions(void) {
 
 static bool has_triggered_start = false;
 
+// Oled worker fn, should run from core 1
 void oled_worker_run(void) {
-    // Busy wait for init
+    // Busy wait for init, making sure all relevant vars are set
     while (1) {
         oled_shared_data_lock();
         if (has_triggered_start) {
@@ -297,32 +303,27 @@ void oled_worker_run(void) {
         oled_shared_data_unlock();
 
     }
-    static bool timer_needs_init = true;
-    if (timer_needs_init) {
-        timer_init();
-        timer_needs_init = false;
-    }
+    // Doesn't change, might as well put it in a var
     bool is_left = is_keyboard_left();
+    // Lock data for initial commit
     oled_shared_data_lock();
     oled_clear();
     oled_display_commit();
+    // Always render all, latency doesn't really matter on this thread
     oled_render_dirty(true);
+    // Unlock post initial commit
     oled_shared_data_unlock();
-    for (;;) {
+    // Main render loop
+    while(1) {
+        // Await wakeup notification
         chSemWait(&oled_writer_semaphore);
+        // Lock data modification
         oled_shared_data_lock();
-        uint16_t cores = PORT_CORES_NUMBER;
-        os_instance_t *inst = currcore;
-        core_id_t core_id = inst->core_id;
-        uint8_t full_smp = CH_CFG_SMP_MODE;
-        os_instance_t *inst2 = &ch1;
-        uint8_t inst2_exists = inst2 != 0;
-        snprintf(left_dbg_buf.content, 10, "%u-%u-%u%u", cores, core_id, full_smp, inst2_exists);
-        left_dbg_buf.header_needs_commit = true;
+        // Commit data to oled buffer, render if necessary
         if (oled_display_commit()) {
             oled_render_dirty(true);
         }
-        // Copy over and pass so that the lock doesn't need to be held over the transaction
+        // Copy over shared data to this thread so that we can drop the lock before running the transaction
         if (is_left) {
             needs_send_shift_cpy.kind = needs_send_shift.kind;
             needs_send_shift_cpy.pressed = needs_send_shift.pressed;
@@ -332,8 +333,9 @@ void oled_worker_run(void) {
             needs_send_shift.kind = 0;
             needs_send_ctrl.kind = 0;
         }
-
+        // Drop lock
         oled_shared_data_unlock();
+        // Only send transactions from the left side
         if (is_left) {
             oled_send_transactions();
         }
