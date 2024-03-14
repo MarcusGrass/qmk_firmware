@@ -933,19 +933,21 @@ void oled_task(void) {
     if (timer_elapsed(oled_update_timeout) >= OLED_UPDATE_INTERVAL) {
         oled_update_timeout = timer_read();
         //oled_set_cursor(0, 0);
-        oled_task_kb();
+        //oled_task_kb();
     }
 #else
     //oled_set_cursor(0, 0);
-    oled_task_kb();
+    //oled_task_kb();
 #endif
 
+    /*
 #if OLED_SCROLL_TIMEOUT > 0
     if (oled_dirty && oled_scrolling) {
         oled_scroll_timeout = timer_read32() + OLED_SCROLL_TIMEOUT;
         oled_scroll_off();
     }
 #endif
+     */
 
     // Display timeout check
 #if OLED_TIMEOUT > 0
@@ -954,6 +956,7 @@ void oled_task(void) {
     }
 #endif
 
+    /*
 #if OLED_SCROLL_TIMEOUT > 0
     if (!oled_scrolling && timer_expired32(timer_read32(), oled_scroll_timeout)) {
 #    ifdef OLED_SCROLL_TIMEOUT_RIGHT
@@ -963,6 +966,7 @@ void oled_task(void) {
 #    endif
     }
 #endif
+     */
 }
 
 __attribute__((weak)) bool oled_task_kb(void) {
