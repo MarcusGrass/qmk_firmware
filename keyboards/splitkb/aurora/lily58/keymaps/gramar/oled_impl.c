@@ -14,10 +14,16 @@ static SEMAPHORE_DECL(oled_writer_semaphore, 0);
 // Mutex for data manipulation
 static MUTEX_DECL(oled_data_mutex);
 
+static CONDVAR_DECL(oled_data_condvar);
+
 #define oled_worker_wakeup() chSemReset(&oled_writer_semaphore, 0)
+#define oled_worker_sleep_short() chSemWaitTimeout(&oled_writer_semaphore, 1000)
+#define oled_worker_go_to_sleep() chSemWaitTimeout(&oled_writer_semaphore, 1000)
 #define oled_shared_data_lock() chMtxLock(&oled_data_mutex)
+#define oled_shared_data_try_lock() chMtxTryLock(&oled_data_mutex)
 #define oled_shared_data_unlock() chMtxUnlock(&oled_data_mutex)
-#define oled_shared_data_release() chMtxUnlock(&oled_data_mutex); oled_worker_wakeup()
+// Wake up the worker before releasing the lock
+#define oled_shared_data_release() oled_worker_wakeup(); chMtxUnlock(&oled_data_mutex)
 
 static void oled_write_separator_line_after(uint8_t line) {
     // 8 pixels line height, plus half a line
@@ -36,6 +42,8 @@ typedef struct {
     uint8_t kind;
     uint8_t pressed;
 } oled_sync_msg;
+
+
 
 // Define a buffer struct that defines a local buffer to which it can write its content, and a function which commits that to
 // the correct place on the oled.
@@ -290,6 +298,9 @@ static void inline __attribute__((always_inline)) oled_send_transactions(void) {
 }
 
 static bool has_triggered_start = false;
+
+void oled_run(void) {
+}
 
 // Oled worker fn, should run from core 1
 void oled_worker_run(void) {

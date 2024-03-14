@@ -1,5 +1,5 @@
 #include "ch.h"
-#include "oled_impl.h"
+#include "secondary_worker.h"
 
 // Necessary symbols to start core 1, core 0 sets up the qmk-important stuff, so these are pretty much all no-ops
 void __c1_cpu_init(void) {
@@ -32,7 +32,6 @@ void c1_main(void) {
     /* It is alive now.*/
     chSysUnlock();
 
-    // Launch oled worker on this core, actually running on this core's main thread, but
-    // could pretty easily thread it out, if there's more interesting stuff to do concurrently.
-    oled_worker_run();
+    // Launch worker loop
+    worker_run();
 }

@@ -24,4 +24,7 @@ RGBLIGHT_ENABLE = no
 ENCODER_ENABLE = yes
 SRC += oled_impl.c
 SRC += encoder_impl.c
+SRC += rp_smp.c
+SRC += secondary_client.c
+SRC += secondary_worker.c
 SRC += secondary_core.c
